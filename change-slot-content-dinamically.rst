@@ -96,7 +96,7 @@ This listener to be callable must be declared into the Dipendency Container Inje
 
     <services>
         <service id="acme_web_site.index_listener" class="%acme_web_site.index_listener.class%">
-            <tag name="alphalemon_theme_engine.event_listener" event="page_renderer.before_index_rendering" method="onPageRendering" priority="0" />
+            <tag name="alpha_lemon_theme_engine.event_listener" event="page_renderer.before_index_rendering" method="onPageRendering" priority="0" />
             <argument type="service" id="service_container" />
         </service>
     </services>
@@ -106,9 +106,9 @@ Declaring a service in the DIC should be a known operation, otherwise you may re
 
 .. code-block:: xml
 
-    <tag name="alphalemon_theme_engine.event_listener" event="page_renderer.before_index_rendering" method="onPageRendering" priority="0" />
+    <tag name="alpha_lemon_theme_engine.event_listener" event="page_renderer.before_index_rendering" method="onPageRendering" priority="0" />
 
-The **name** option identifies the kind of event and it must be **alphalemon_theme_engine.event_listener**. The called method is **onPageRendering**
+The **name** option identifies the kind of event and it must be **alpha_lemon_theme_engine.event_listener**. The called method is **onPageRendering**
 and it is defined in the parent class of your listener.
 
 More interesting is the event option, which, in this case, is **page_renderer.before_index_rendering**: this means that this listener will be

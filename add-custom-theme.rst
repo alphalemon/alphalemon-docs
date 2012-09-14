@@ -115,13 +115,13 @@ So copy the services.xml file, rename it as **fancy_theme.xml** and add the foll
 
     // Acme/Theme/FancyThemeBundle/Resources/config/fancy_theme.xml
     <services>
-        <service id="fancy.theme" class="%alphalemon_theme_engine.theme.class%">
+        <service id="fancy.theme" class="%alpha_lemon_theme_engine.theme.class%">
             <argument type="string">FancyTheme</argument>
         </service>
     </services>
 
 This service defines an AlTheme object and its class has already been declared in the ThemeEngine services configuration and it is identified by the
-**%alphalemon_theme_engine.theme.class%** parameter.
+**%alpha_lemon_theme_engine.theme.class%** parameter.
 
 The theme's id is defined as **[theme_name].theme** and requires a string argument which contains the theme's name, **FancyTheme** in this case. To tell AlphaLemon
 that this bundle is a Theme-App the service must be tagged as follows:
@@ -129,12 +129,12 @@ that this bundle is a Theme-App the service must be tagged as follows:
 .. code-block:: xml
 
     // Acme/Theme/FancyThemeBundle/Resources/config/services.xml
-    <service id="fancy.theme" class="%alphalemon_theme_engine.theme.class%">
+    <service id="fancy.theme" class="%alpha_lemon_theme_engine.theme.class%">
         [...]
-        <tag name="alphalemon_theme_engine.themes.theme" />
+        <tag name="alpha_lemon_theme_engine.themes.theme" />
     </service>
 
-and the name option must always be **alphalemon_theme_engine.themes.theme**.
+and the name option must always be **alpha_lemon_theme_engine.themes.theme**.
 
 Add a template
 --------------
@@ -170,7 +170,7 @@ To add a new template service add the following code:
 
     // Acme/Theme/FancyThemeBundle/Resources/config/templates/home.xml
     <services>
-        <service id="fancy.theme.template.home" class="%alphalemon_theme_engine.template.class%">
+        <service id="fancy.theme.template.home" class="%alpha_lemon_theme_engine.template.class%">
             <argument type="service" id="kernel" />
             <argument type="service" id="fancy.theme.template_assets.home" />
             <argument type="service" id="fancy.theme.template.home.slots" />
@@ -186,7 +186,7 @@ To add a new template service add the following code:
     </services>
 
 This service defines an AlTemplate object and its class has already been declared in the ThemeEngine services configuration and it is identified by the
-**%alphalemon_theme_engine.template.class%** parameter.
+**%alpha_lemon_theme_engine.template.class%** parameter.
 
 The template id has been defined as **[theme_name].template.[template_name]** and, while this scheme is not mandatory, you should follow it as best practice.
 
@@ -206,7 +206,7 @@ The template assets service contains the assets used by the template and it is d
 
     // Acme/Theme/FancyThemeBundle/Resources/config/templates/home.xml
     <services>
-        <service id="fancy.theme.template_assets.home" class="%alphalemon_theme_engine.template_assets.class%">
+        <service id="fancy.theme.template_assets.home" class="%alpha_lemon_theme_engine.template_assets.class%">
             <call method="setExternalStylesheets">
                 <argument type="collection">
                     <argument>@FancyThemeBundle/Resources/public/css/reset.css</argument>
@@ -219,7 +219,7 @@ The template assets service contains the assets used by the template and it is d
     </services>
 
 This service defines an AlTemplateAssets object and its class has already been declared in the ThemeEngine services configuration and it is identified by the
-**%alphalemon_theme_engine.template_assets.class%** parameter.
+**%alpha_lemon_theme_engine.template_assets.class%** parameter.
 
 The template assets id has been defined as **[theme_name].template_assets.[template_name]** and, while this scheme is not mandatory, you should follow it as best practice.
 
@@ -240,14 +240,14 @@ The code that defines that service is the following:
 
     // Acme/Theme/FancyThemeBundle/Resources/config/templates/home.xml
     <services>
-        <service id="fancy.theme.template.home.slots" class="%alphalemon_theme_engine.template_slots.class%">
+        <service id="fancy.theme.template.home.slots" class="%alpha_lemon_theme_engine.template_slots.class%">
         </service>
 
         [...]
     </services>
 
 This service defines an AlTemplateSlots object and its class has already been declared in the ThemeEngine services configuration and it is identified by the
-**%alphalemon_theme_engine.template_slots.class%** parameter.
+**%alpha_lemon_theme_engine.template_slots.class%** parameter.
 
 The template slots' id is defined as **[theme].template.[template_name].slots** and its implementation object has already been defined in
 the theme engine.
@@ -363,13 +363,13 @@ so, inside the **services** tag add the following code:
 .. code-block:: xml
 
     // Acme/Theme/FancyThemeBundle/Resources/config/templates/slots/home.xml
-    <service id="fancy.theme.template.home.slots.logo" class="%alphalemon_theme_engine.slot.class%">
+    <service id="fancy.theme.template.home.slots.logo" class="%alpha_lemon_theme_engine.slot.class%">
         <argument type="string">logo</argument>
         <tag name="business_website_theme.template.home.slots" />
     </service>
 
 This service defines an AlSlot object and its class has already been declared in the ThemeEngine services configuration and it is identified by the
-**%alphalemon_theme_engine.slot.class%** parameter.
+**%alpha_lemon_theme_engine.slot.class%** parameter.
 
 This object requires as first argument a string that defines the slot name.
 
@@ -399,7 +399,7 @@ the **htmlContent** option as follows:
 .. code-block:: xml
 
     // Acme/Theme/FancyThemeBundle/Resources/config/templates/slots/home.xml
-    <service id="fancy.theme.template.home.slots.logo" class="%alphalemon_theme_engine.slot.class%">
+    <service id="fancy.theme.template.home.slots.logo" class="%alpha_lemon_theme_engine.slot.class%">
         <argument type="string">logo</argument>
         <argument type="collection" >
             <argument key="htmlContent">
