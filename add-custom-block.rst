@@ -179,12 +179,11 @@ To tell AlphaLemonCMS to manage this bundle open the **service.xml** file under 
 
     <services>
         <service id="app_fancy_block.block" class="%app_fancy_block.block.class%">
-            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="alpha_lemon_cms.events_handler" />
         </service>
     </services>
 
-A new service named **app_fancy_block.block** has been declared. Please notice that this object requires the symfony2 **event_dispatcher**
-service passed as argument.
+A new service named **app_fancy_block.block** has been declared and an **alpha_lemon_cms.events_handler** object has been passed as argument.
 
 But that's not enough to declare that service as a App-Block, in fact to achieve that task, the service must be tagged as follows:
 
