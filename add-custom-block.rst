@@ -166,22 +166,32 @@ web page. In our example just a simple html paragraph is added.
 How to tell AlphaLemonCMS to manager the Bundle
 -----------------------------------------------
 
-An App-Block Bundle must be declared as services in the **Dependency Injector Container**.
+An App-Block Bundle must be declared as services in the **Dependency Injector Container**. This service must be available just only
+when AlphaLemon CMS is active, so when the **alcms** environment is in use.
 
-To tell AlphaLemonCMS to manage this bundle open the **service.xml** file under the bundle's **Resources/config** folder and add the following code:
+The first thing to do is to add a new **app_block.xml** configuration file under the **Resources/config** folder of your bundle, then
+open it and add the following code:
 
 .. code-block:: xml
 
-    // AlphaLemon/Block/FancyBlockBundle/Resources/config/service.xml
-    <parameters>
-        <parameter key="app_fancy_block.block.class">Acme\FancyBlockBundle\Core\Block\AlBlockManagerFancyBlock</parameter>
-    </parameters>
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <services>
-        <service id="app_fancy_block.block" class="%app_fancy_block.block.class%">
-            <argument type="service" id="alpha_lemon_cms.events_handler" />
-        </service>
-    </services>
+        // AlphaLemon/Block/FancyBlockBundle/Resources/config/service.xml
+        <parameters>
+            <parameter key="app_fancy_block.block.class">Acme\FancyBlockBundle\Core\Block\AlBlockManagerFancyBlock</parameter>
+        </parameters>
+
+        <services>
+            <service id="app_fancy_block.block" class="%app_fancy_block.block.class%">
+                <argument type="service" id="alpha_lemon_cms.events_handler" />
+            </service>
+        </services>
+    </container>
+
+While the config file name is not mandatory, it is a best practice to use that particular name.
 
 A new service named **app_fancy_block.block** has been declared and an **alpha_lemon_cms.events_handler** object has been passed as argument.
 
@@ -204,32 +214,20 @@ The block's tag accepts serveral options:
 
 Add the block to the Dependency Injector Container
 --------------------------------------------------
-The block must be registered in the DIC, so open the **AlphaLemon/Block/FancyBlockBundle/DependencyInjection/FancyBlockExtension.php**
-and add the following code:
+In the previous paragraph we saw that the service must be only enable in the **alcms** environment. To achieve this task simply
+add a new file named **config_alcms.yml** under the **Resources/config** folder of your bundle, open it and add the following
+code:
 
-.. code-block:: php
+.. code-block:: text
 
-    namespace AlphaLemon\Block\FancyBlockBundle\DependencyInjection;
+    imports:
+    - { resource: "@FancyBlockBundle/Resources/config/app_block.xml" }
 
-    use Symfony\Component\DependencyInjection\ContainerBuilder;
-    use Symfony\Component\Config\FileLocator;
-    use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-    use Symfony\Component\DependencyInjection\Loader;
+This configuration should be made in the app's **config_cms.yml** file, but thanks to the AlphaLemonBootstrapBundle, this configuration is
+automatically loaded.
 
-    class FancyBlockBundle extends Extension
-    {
-        /**
-        * {@inheritDoc}
-        */
-        public function load(array $configs, ContainerBuilder $container)
-        {
-            $configuration = new Configuration();
-            $config = $this->processConfiguration($configuration, $configs);
-
-            $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-            $loader->load('services.xml');
-        }
-    }
+This operation must be repeated for each environment, so you may copy the **config_alcms.yml** to **config_alcms_dev.yml** to add that
+service for the **alcms_dev** environment too.
 
 
 Enabling the block
