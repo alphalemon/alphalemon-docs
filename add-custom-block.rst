@@ -163,8 +163,8 @@ web page. In our example just a simple html paragraph is added.
 
     The ExternalStylesheet and ExternalJavascript must contain a string of assets separated by a comma value.
 
-How to tell AlphaLemonCMS to manager the Bundle
------------------------------------------------
+How to tell AlphaLemonCMS to manage the Bundle
+----------------------------------------------
 
 An App-Block Bundle must be declared as services in the **Dependency Injector Container**. This service must be available just only
 when AlphaLemon CMS is active, so when the **alcms** environment is in use.
@@ -288,13 +288,23 @@ To enable the editor you must add a parameter to the services configuration file
 .. code-block:: xml
 
     // AlphaLemon/Block/FancyBlockBundle/Resources/config/service.xml
-    <parameter key="fancyblock_editor_settings" type="collection">
+    <parameter key="fancyblock.editor_settings" type="collection">
         <parameter key="rich_editor">true</parameter>
         <parameter key="external_js">true</parameter>
     </parameter>
 
 That configuration enables both the editor to manage the html content as a rich editor and the editor to manage the external
 javascripts. So you just combine those options to get the editor you need.
+
+The key parameter must be defined as **[ bundle_name ].editor_settings**
+
+.. note::
+    In older versions, this parameter was defined as
+
+    **[ bundle_name ]_editor_settings**
+
+    and this backward compatibility has been mantained, but it will be discontinued when AlphaLemon CMS Beta will be released.
+
 
 Custom editor
 ~~~~~~~~~~~~~
