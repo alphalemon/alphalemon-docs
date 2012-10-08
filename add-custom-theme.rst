@@ -1,7 +1,7 @@
 Add a custom Theme-App to AlphaLemon CMS
 ========================================
 
-This chapter will explain how to add a new Theme-App to AlphaLemon CMS.
+This chapter explains how to add a new theme AlphaLemon CMS.
 
 What is a Theme
 ---------------
@@ -20,245 +20,68 @@ A Theme-App is a standalone symfony2 bundle. This approach has several advantage
 
 Create the FancyThemeBundle
 ---------------------------
+Alphalemon has two built-in commands which help to add a new theme:
 
-The very first step is to add a new bundle to your application. AlphaLemon does not require to have the bundle placed
-into a specific location, so you can place it everywhere. Let's add this new bundle into the standard **src** folder:
+- **alphalemon:generate:app-theme**
+- **alphalemon:generate:themplates**
+
+The first command generate a new App-Theme Bundle, the second one generate the templates configuration files.
+
+To start a new theme, you must run the **alphalemon:generate:app-theme** command from your console. This command
+extends the Symfony's generate:bundle command, so the process should be familiar. Run the following command to
+start:
 
 .. code-block:: text
 
-    php app/console generate:bundle
+    php app/console alphalemon:generate:app-theme
 
+You'll get the following response:
 
-    Welcome to the Symfony2 bundle generator
+.. code-block:: text
+
+        Welcome to the Symfony2 bundle generator
+
     [...]
 
-    Use / instead of \ for the namespace delimiter to avoid any problem.
+    Bundle namespace:
 
-Enter the bundle name, as follows:
+Answer as following:
 
 .. code-block:: text
 
     Bundle namespace: Acme/Theme/FancyThemeBundle
 
-    In your code, a bundle is often referenced by its name. It can be the
-    concatenation of all namespace parts but it's really up to you to come
-    up with a unique name (a good practice is to start with the vendor name).
-    Based on the namespace, we suggest AcmeFancyBlockBundle.
-
-The proposed bundle **name must be changed** to FancyThemeBundle:
+The proposed bundle name **must be changed** to FancyThemeBundle otherwise you might have troubles:
 
 .. code-block:: text
 
     Bundle name [AcmeThemeFancyThemeBundle]: FancyThemeBundle
 
-    The bundle can be generated anywhere. The suggested default directory uses
-    the standard conventions.
+Next options could be left as proposed or you may change them to fit your needs.
+Don't forget to let the command updates the AppKernel for you to enable the bundle.
 
-The proposed folder is fine:
+NOTE:
 
-.. code-block:: text
+    This command does not manipulates the site's routes.
 
-    Target directory [/home/alphalemon/www/AlphaLemonCmsSandbox/src]:
+Congratulations your first App-Theme has been created, but, wait a moment, way a new command if
+the creation procedure is the same of a normal bundle?
 
-Leave the next options as proposed:
+Easy, because this commands adds a new configuration file into the **config** folder that sets
+the services to define the theme. See [ THEMES INTERNAL ] to learn more.
 
-.. code-block:: text
+Add the twig templates
+----------------------
 
-    Determine the format to use for the generated configuration.
-
-    Configuration format (yml, xml, php, or annotation) [annotation]:
-
-    To help you getting started faster, the command can generate some
-    code snippets for you.
-
-    Do you want to generate the whole directory structure [no]?
-
-
-    Summary before generation
-
-
-    You are going to generate a "Acme\FancyThemeBundle\FancyThemeBundle" bundle
-    in "/home/alphalemon/www/AlphaLemonCmsSandbox/src" using the "annotation" format.
-
-    Do you confirm generation [yes]?
-
-
-  Bundle generation
-
-
-    Generating the bundle code: OK
-    Checking that the bundle is autoloaded: OK
-
-Please, say **NO** to Kernel's and Routind update request:
-
-.. code-block:: text
-
-    Confirm automatic update of your Kernel [yes]? no
-    Enabling the bundle inside the Kernel: FAILED
-    Confirm automatic update of the Routing [yes]? no
-    Importing the bundle routing resource: FAILED
-
-Well done! Your very first Theme-App has been created! At the moment AlphaLemon CMS does not know yet that it will manage
-that bundle as a Theme, so let's see how to tell AlphaLemon to use the FancyThemeBundle as a Theme.
-
-Add the Theme service
----------------------
-
-An AlphaLemon CMS theme must be defined as a service in the DIC **Dependency Injector Container**. To tell AlphaLemon CMS to manage
-this bundle, you should add to the **service.xml** file, stored under the bundle's **Resources/config** folder the theme's configuration.
-
-As best practice for this kind of bundle, it's better to create a dedicated configuration file, named as the theme itself.
-So copy the services.xml file, rename it as **fancy_theme.xml** and add the following code:
-
-
-.. code-block:: xml
-
-    // Acme/Theme/FancyThemeBundle/Resources/config/fancy_theme.xml
-    <services>
-        <service id="fancy.theme" class="%alpha_lemon_theme_engine.theme.class%">
-            <argument type="string">FancyTheme</argument>
-        </service>
-    </services>
-
-This service defines an AlTheme object and its class has already been declared in the ThemeEngine services configuration and it is identified by the
-**%alpha_lemon_theme_engine.theme.class%** parameter.
-
-The theme's id is defined as **[theme_name].theme** and requires a string argument which contains the theme's name, **FancyTheme** in this case. To tell AlphaLemon
-that this bundle is a Theme-App the service must be tagged as follows:
-
-.. code-block:: xml
-
-    // Acme/Theme/FancyThemeBundle/Resources/config/services.xml
-    <service id="fancy.theme" class="%alpha_lemon_theme_engine.theme.class%">
-        [...]
-        <tag name="alpha_lemon_theme_engine.themes.theme" />
-    </service>
-
-and the name option must always be **alpha_lemon_theme_engine.themes.theme**.
-
-Add a template
---------------
-
-As saw for themes, templates must be declared in the **Dependency Injector Container**. Best practice is to add a new folder called **templates**
-under the **Resources/config** directory, so add that folder and under it a new file using the name of the template to name the file itself, in this
-case call it **home.xml**. Open it and add the following code:
-
-.. code-block:: xml
-
-    // Acme/Theme/FancyThemeBundle/Resources/config/templates/home.xml
-    <?xml version="1.0" encoding="UTF-8" ?>
-    <container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
-        <services>
-        </services>
-    </container>
-
-To define a valid template you must initialize three services:
-
-1. The template
-2. The template assets
-3. The template slots.
-
-The template service
-~~~~~~~~~~~~~~~~~~~~
-
-To add a new template service add the following code:
-
-.. code-block:: xml
-
-    // Acme/Theme/FancyThemeBundle/Resources/config/templates/home.xml
-    <services>
-        <service id="fancy.theme.template.home" class="%alpha_lemon_theme_engine.template.class%">
-            <argument type="service" id="kernel" />
-            <argument type="service" id="fancy.theme.template_assets.home" />
-            <argument type="service" id="fancy.theme.template.home.slots" />
-            <tag name="fancy.theme.template" />
-        </service>
-
-        <call method="setThemeName">
-            <argument type="string">FancyThemeBundle</argument>
-        </call>
-        <call method="setTemplateName">
-            <argument type="string">Home</argument>
-        </call>
-    </services>
-
-This service defines an AlTemplate object and its class has already been declared in the ThemeEngine services configuration and it is identified by the
-**%alpha_lemon_theme_engine.template.class%** parameter.
-
-The template id has been defined as **[theme_name].template.[template_name]** and, while this scheme is not mandatory, you should follow it as best practice.
-
-This service requires three arguments: the symfony's kernel service, a **fancy.theme.template_assets.home** service and a
-**fancy.theme.template.home.slots** service which are the services mentioned above, that will be defined in a while.
-
-The most important setting is the tag one, which name option must always follow the schema **[theme_name].template**, in this example **fancy.theme.template**.
-
-As last the **setThemeName** and **setTemplateName** methods are called to define respectly the theme's name an the template's name.
-
-The template assets service
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The template assets service contains the assets used by the template and it is defined as follows:
-
-.. code-block:: xml
-
-    // Acme/Theme/FancyThemeBundle/Resources/config/templates/home.xml
-    <services>
-        <service id="fancy.theme.template_assets.home" class="%alpha_lemon_theme_engine.template_assets.class%">
-            <call method="setExternalStylesheets">
-                <argument type="collection">
-                    <argument>@FancyThemeBundle/Resources/public/css/reset.css</argument>
-                    <argument>@FancyThemeBundle/Resources/public/css/layout.css</argument>
-                </argument>
-            </call>
-        </service>
-
-        [...]
-    </services>
-
-This service defines an AlTemplateAssets object and its class has already been declared in the ThemeEngine services configuration and it is identified by the
-**%alpha_lemon_theme_engine.template_assets.class%** parameter.
-
-The template assets id has been defined as **[theme_name].template_assets.[template_name]** and, while this scheme is not mandatory, you should follow it as best practice.
-
-It calls the **setExternalStylesheets** method to add two external stylesheets to the template. You may call several methods to define the template assets:
-
-1. setExternalStylesheets - Adds some stylesheets to the template
-2. setExternalJavascripts - Adds some javascripts to the template
-3. setInternalStylesheets - Adds an internal stylesheet to the template
-4. setInternalJavascripts - Adds an internal javascript to the template
-
-The template slots service
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The last service to define is the **template slots** service. Each AlphaLemon's template is made by slots and each slot is the place where one or more blocks live.
-The code that defines that service is the following:
-
-.. code-block:: xml
-
-    // Acme/Theme/FancyThemeBundle/Resources/config/templates/home.xml
-    <services>
-        <service id="fancy.theme.template.home.slots" class="%alpha_lemon_theme_engine.template_slots.class%">
-        </service>
-
-        [...]
-    </services>
-
-This service defines an AlTemplateSlots object and its class has already been declared in the ThemeEngine services configuration and it is identified by the
-**%alpha_lemon_theme_engine.template_slots.class%** parameter.
-
-The template slots' id is defined as **[theme].template.[template_name].slots** and its implementation object has already been defined in
-the theme engine.
-
-The template assets id has been defined as **[theme_name].template.[template_name].slot** and is mandatory.
+When the theme is created, you may start to add your twig templates to the theme bundle. The
+**generate:app-theme** command, adds a new **Theme** folder under the **Resources/views** folder
+of your App-Theme bundle: your templates must be placed inside that folder.
 
 The design
-----------
+~~~~~~~~~~
 
-AlphaLemon Cms uses **twig** as template engine, so when you have converted the templates to html, you must write them to
-twig.
+AlphaLemon Cms uses **twig** as template engine, so when you have converted the templates to html,
+you must write them to twig.
 
 Clean the template
 ~~~~~~~~~~~~~~~~~~
@@ -321,6 +144,9 @@ Another best practice to follow is to use the **renderSlot** function inside a *
         {{ renderSlot('logo') }}
     </p>
 
+[ NOTE ]
+Don't throw away the replaced code, it will be used in a while
+
 Prepare your template to be overriden
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -338,176 +164,100 @@ wrap the renderSlot function with a block instruction:
     </div>
     [...]
 
-Declare the template slots
---------------------------
+Define the template assets
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Each template comes with one or more external assets, like javascript and stylesheet files. Those assets
+are declared in a comment section as follows:
 
-The last thing to do is to define the slots for each template. This configuration is always made in the DIC and, as best practice, it
-should live inside the **Resources/config/templates/slots** folder of your Theme-App, so add that folder and create a new **home.xml**
-file inside. Open that file and add the following code:
+{# BEGIN-EXTERNAL-STYLESHEETS
+@BusinessWebsiteThemeBundle/Resources/public/css/reset.css
+@BusinessWebsiteThemeBundle/Resources/public/css/style.css
+END-EXTERNAL-STYLESHEETS #}
 
-.. code-block:: xml
+There are four recognized sections by AlphaLemon CMS:
 
-    // Acme/Theme/FancyThemeBundle/Resources/config/templates/slots/home.xml
-    <?xml version="1.0" encoding="UTF-8" ?>
-    <container xmlns="http://symfony.com/schema/dic/services"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+- BEGIN-EXTERNAL-STYLESHEETS / END-EXTERNAL-STYLESHEETS
+- BEGIN-EXTERNAL-JAVASCRIPTS / END-EXTERNAL-JAVASCRIPTS
+- BEGIN-CMS-STYLESHEETS / END-CMS-STYLESHEETS
+- BEGIN-CMS-JAVASCRIPTS / END-CMS-JAVASCRIPTS
 
-        <services>
-        </services>
-    </container>
+The first section is used to declare the website's external stylesheets files and the second is for javascripts.
+The other two sections are used to declare respectively stylesheets ot javascripts that AlphaLemon Cms must load
+only when the CMS is active.
 
-The name file is not mandatory, but it should be named as the template where the slot lives. Now the logo slot must be defined,
-so, inside the **services** tag add the following code:
+Those section should be added at the top of the page and none of them is mandatory.
 
-.. code-block:: xml
+Define the slot attributes
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    // Acme/Theme/FancyThemeBundle/Resources/config/templates/slots/home.xml
-    <service id="fancy.theme.template.home.slots.logo" class="%alpha_lemon_theme_engine.slot.class%">
-        <argument type="string">logo</argument>
-        <tag name="business_website_theme.template.home.slots" />
-    </service>
+To define the attributes of each slot you must add a comment which contains those attributes as follows:
 
-This service defines an AlSlot object and its class has already been declared in the ThemeEngine services configuration and it is identified by the
-**%alpha_lemon_theme_engine.slot.class%** parameter.
+.. code-block:: html+jinja
 
-This object requires as first argument a string that defines the slot name.
+    <div id="header">
+        <div id="logo">
+            {# BEGIN-SLOT
+                name: logo
+                repeated: site
+                htmlContent: |
+                    <img src="/uploads/assets/media/business-website-original-logo.png" title="Progress website logo" alt="Progress website logo" />
+            END-SLOT #}
+            {% block logo %}
+            {{ renderSlot('logo') }}
+            {% endblock %}
+        </div>
+    </div>
+    [...]
 
-As saw for other services, this service must be tagged following this scheme: **[theme_name].template.[template_name].slots**.
+Let's explain carefully. Each attribute section must start with **BEGIN-SLOT** directive and closed by the
+**END-SLOT** directive.
 
-Addictiona options for AlSlot object
-------------------------------------
+Attributes must be written in valid **yml** syntax. Yml requires a perfect indentation, so the first line defines the intentation for
+the other attributes:
 
-The AlSlot object accepts an array of options as second argumentis an optiona array of options. The possibile values are:
+.. code-block:: html+jinja
+    {# BEGIN-SLOT
+        name: logo
+        repeated: site
+            htmlContent: |
+                <img src="/uploads/assets/media/business-website-original-logo.png" title="Progress website logo" alt="Progress website logo" />
+    END-SLOT #}
 
-1. blockType
-2. htmlContent
-3. repeated
+The code above will fail because the third attribute has a wrong indentation.
 
-The blockType option
+The **name** option is mandatory and when it is omitted the slot is skipped. The accepted values for
+attributes are the following ones:
+
+- repeated
+- blockType
+- htmlContent
+
+The **repeated** attribute tells AlphaLemon how to repeate the block through the website's pages,
+the **blockType** is the type of block to add to the slot and the **htmlContent* is the default
+html code added to the block when a new one is added to the page. You may learn more on [ BLOCKS ]
+chapter.
+
+None of them is required, but when you don't need to specify any attribute, you must however
+define the section:
+
+.. code-block:: html+jinja
+    {# BEGIN-SLOT
+        name: logo
+    END-SLOT #}
+
+
+While this comments could be placed everywhere on your template, it's strongly suggested to place it
+above the **renderSlot** call.
+
+
+Let the magic starts
 ~~~~~~~~~~~~~~~~~~~~
+When your templates are ready, you may let the magic starts, running the second command exposed
+at the begininng of this tutorial:
 
-Defines the block type AlphaLemon CMS must add for that slot when a new page is added and, by default, the block type added is Text.
-For this slot the default type is good, so this option is not defined.
+.. code-block:: text
 
-The htmlContent option
-~~~~~~~~~~~~~~~~~~~~~~
+    alphalemon:generate:themplates
 
-For the logo content we want that AlphaLemon adds the same content designed by the template's designer. To do this we must define
-the **htmlContent** option as follows:
-
-.. code-block:: xml
-
-    // Acme/Theme/FancyThemeBundle/Resources/config/templates/slots/home.xml
-    <service id="fancy.theme.template.home.slots.logo" class="%alpha_lemon_theme_engine.slot.class%">
-        <argument type="string">logo</argument>
-        <argument type="collection" >
-            <argument key="htmlContent">
-                <![CDATA[
-                    <a href="#"><img src="images/logo.png" title="Download AlphaLemonCMS" alt="" /></a>
-                ]]>
-            </argument>
-        </argument>
-        <tag name="business_website_theme.template.home.slots" />
-    </service>
-
-In this way every time a new page is added, the content added to the page by AlphaLemon CMS will be the one defined by the htmlContent option.
-To use the default value added by the block, simply don't declare this option.
-
-The repeated option
-~~~~~~~~~~~~~~~~~~~
-
-Most of the contents displayed on a web page are repeated through the website pages. For example the site logo usually is the same for all the
-site's pages, while a navigation menu is the same for a specific language.
-
-The repeated option manages this behavior and repeats the content for the blocks that live on a slot. The possibile values for this option are:
-
-1. page (default)
-2. language
-3. site
-
-The logo for this website must be the same on each page, so we add the repeated option as follows:
-
-.. code-block:: xml
-
-    <argument type="collection" >
-        [...]
-        <argument key="repeated">site</argument>
-    </argument>
-
-The base config file
-~~~~~~~~~~~~~~~~~~~~
-
-The slot logo has been added to the home.xml config file. This works but if we need to add another template to the theme the slot logo should be added to
-this new file, creating a code repetition.
-
-To avoid this situation, these special slots must be place on a common file named **base.xml**. The name is mandatory.
-
-Register the configuration files
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The configuration files must be registered in the **Dependency Injector Container**:
-
-.. code-block:: php
-
-    // Acme/Theme/FancyThemeBundle/DependencyInjection/FancyThemeExtension.php
-    class FancyThemeExtension extends Extension
-    {
-        public function load(array $configs, ContainerBuilder $container)
-        {
-            // Register the services file
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-            $loader->load('fancy_theme.xml');
-
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/templates'));
-            $loader->load('home.xml');
-
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/templates/slots'));
-            $loader->load('base.xml');
-            $loader->load('home.xml');
-        }
-
-        public function getAlias()
-        {
-            return 'business_website_theme';
-        }
-    }
-
-At last the bundle must be registerd in the **AppKernel** file:
-
-.. code-block:: php
-
-    // app/AppKernel.php
-    class AppKernel extends Kernel
-    {
-        public function registerBundles()
-        {
-            $bundles = array(
-                [...],
-                new Acme/Theme/FancyThemeBundle/FancyThemeBundle(),
-            );
-        }
-    }
-
-Override a template
--------------------
-
-Let's assume that you want to use a new theme, called **AwesomeThemeBundle** and that this theme has two templates, named home.twig.html and internal.twig.html.
-
-When the **renderSlot** function has been explained, it has been presented as best practice to adopt for distributable themes, to wrap the render block function
-with a block section to let the template overridable.
-
-To override a template, simple create a new folder called as the new theme you want to use, so **AwesomeThemeBundle**, under the **app/Resources/views** folder
-of your application than add a new **home.twig.html**, open it and add the following code:
-
-.. code-block:: jinja
-
-    // app/Resources/views/AwesomeThemeBundle/home.twig.html
-    {% extends 'AwesomeThemeBundle:Theme:home.html.twig' %}
-
-    {% block left_sidebar %}
-    {{ renderSlot('top_section_1') }}
-    {% endblock %}
-
-This code overrides the **AwesomeThemeBundle's home.html.twig** template replacing the **left_sidebar** slot with the contents saved with the **top_section_1** slot
-you have filled in your previous **home.twig.html** template.
+This command will generate the config files that defines the theme's templates. If there's something
+wrong a notice is displayed.
