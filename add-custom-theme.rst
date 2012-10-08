@@ -170,8 +170,8 @@ Each template comes with one or more external assets, like javascript and styles
 are declared in a comment section as follows:
 
 {# BEGIN-EXTERNAL-STYLESHEETS
-@BusinessWebsiteThemeBundle/Resources/public/css/reset.css
-@BusinessWebsiteThemeBundle/Resources/public/css/style.css
+@FancyThemeBundle/Resources/public/css/reset.css
+@FancyThemeBundle/Resources/public/css/style.css
 END-EXTERNAL-STYLESHEETS #}
 
 There are four recognized sections by AlphaLemon CMS:
@@ -257,7 +257,7 @@ at the begininng of this tutorial:
 
 .. code-block:: text
 
-    alphalemon:generate:themplates
+    alphalemon:generate:themplates FancyThemeBundle
 
-This command will generate the config files that defines the theme's templates. If there's something
-wrong a notice is displayed.
+This command requires the FancyThemeBundle argument and will generate the config files that defines
+the theme's templates. If there's something wrong a notice is displayed.
