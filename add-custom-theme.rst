@@ -60,7 +60,7 @@ The proposed bundle name **must be changed** to FancyThemeBundle otherwise you m
 Next options could be left as proposed or you may change them to fit your needs.
 Don't forget to let the command updates the AppKernel for you to enable the bundle.
 
-NOTE:
+.. note::
 
     This command does not manipulates the site's routes.
 
@@ -169,10 +169,11 @@ Define the template assets
 Each template comes with one or more external assets, like javascript and stylesheet files. Those assets
 are declared in a comment section as follows:
 
-{# BEGIN-EXTERNAL-STYLESHEETS
-@BusinessWebsiteThemeBundle/Resources/public/css/reset.css
-@BusinessWebsiteThemeBundle/Resources/public/css/style.css
-END-EXTERNAL-STYLESHEETS #}
+.. code-block:: html+jinja
+    {# BEGIN-EXTERNAL-STYLESHEETS
+    @BusinessWebsiteThemeBundle/Resources/public/css/reset.css
+    @BusinessWebsiteThemeBundle/Resources/public/css/style.css
+    END-EXTERNAL-STYLESHEETS #}
 
 There are four recognized sections by AlphaLemon CMS:
 
