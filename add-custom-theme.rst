@@ -170,8 +170,8 @@ Each template comes with one or more external assets, like javascript and styles
 are declared in a comment section as follows:
 
 {# BEGIN-EXTERNAL-STYLESHEETS
-@FancyThemeBundle/Resources/public/css/reset.css
-@FancyThemeBundle/Resources/public/css/style.css
+@BusinessWebsiteThemeBundle/Resources/public/css/reset.css
+@BusinessWebsiteThemeBundle/Resources/public/css/style.css
 END-EXTERNAL-STYLESHEETS #}
 
 There are four recognized sections by AlphaLemon CMS:
@@ -257,7 +257,30 @@ at the begininng of this tutorial:
 
 .. code-block:: text
 
-    alphalemon:generate:themplates FancyThemeBundle
+    alphalemon:generate:themplates
 
-This command requires the FancyThemeBundle argument and will generate the config files that defines
-the theme's templates. If there's something wrong a notice is displayed.
+This command will generate the config files that defines the theme's templates. If there's something
+wrong, a notice is displayed.
+
+Override a template
+-------------------
+
+Let's assume that you want to use a new theme, called **AwesomeThemeBundle** and that this theme has two templates, named home.twig.html and internal.twig.html.
+
+When the **renderSlot** function has been explained, it has been presented as best practice to adopt for distributable themes, to wrap the render block function
+with a block section to let the template overridable.
+
+To override a template, simple create a new folder called as the new theme you want to use, so **AwesomeThemeBundle**, under the **app/Resources/views** folder
+of your application than add a new **home.twig.html**, open it and add the following code:
+
+.. code-block:: jinja
+
+    // app/Resources/views/AwesomeThemeBundle/home.twig.html
+    {% extends 'AwesomeThemeBundle:Theme:home.html.twig' %}
+
+    {% block left_sidebar %}
+    {{ renderSlot('top_section_1') }}
+    {% endblock %}
+
+This code overrides the **AwesomeThemeBundle's home.html.twig** template replacing the **left_sidebar** slot with the contents saved with the **top_section_1** slot
+you have filled in your previous **home.twig.html** template.
