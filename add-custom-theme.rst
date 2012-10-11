@@ -27,8 +27,9 @@ Alphalemon has two built-in commands which help to add a new theme:
 
 The first command generate a new App-Theme Bundle, the second one generate the templates configuration files.
 
-To start a new theme, you must run the **alphalemon:generate:app-theme** command from your console. This command
-extends the Symfony's generate:bundle command, so the process should be familiar. Run the following command to
+To start a new theme, you must run the **alphalemon:generate:app-theme** command from your console.
+
+This command extends the Symfony's generate:bundle command, so the process should be familiar. Run the following command to
 start:
 
 .. code-block:: text
@@ -58,24 +59,26 @@ The proposed bundle name **must be changed** to FancyThemeBundle otherwise you m
     Bundle name [AcmeThemeFancyThemeBundle]: FancyThemeBundle
 
 Next options could be left as proposed or you may change them to fit your needs.
+
 Don't forget to let the command updates the AppKernel for you to enable the bundle.
 
 .. note::
 
     This command does not manipulates the site's routes.
 
-Congratulations your first App-Theme has been created, but, wait a moment, way a new command if
+Your first App-Theme has been created, but, wait a moment, way a new command if
 the creation procedure is the same of a normal bundle?
 
 Easy, because this commands adds a new configuration file into the **config** folder that sets
-the services to define the theme. See [ THEMES INTERNAL ] to learn more.
+the services to define the theme. See `themes internal configuration`_ to learn more.
 
 Add the twig templates
 ----------------------
 
-When the theme is created, you may start to add your twig templates to the theme bundle. The
-**generate:app-theme** command, adds a new **Theme** folder under the **Resources/views** folder
-of your App-Theme bundle: your templates must be placed inside that folder.
+When the theme is created, you must start to add your twig templates to the theme bundle.
+
+The **generate:app-theme** command, adds a new **Theme** folder under the **Resources/views**
+folder of your App-Theme bundle: your templates must be placed inside that folder.
 
 The design
 ~~~~~~~~~~
@@ -144,8 +147,9 @@ Another best practice to follow is to use the **renderSlot** function inside a *
         {{ renderSlot('logo') }}
     </p>
 
-[ NOTE ]
-Don't throw away the replaced code, it will be used in a while
+.. note::
+
+    Don't throw away the replaced code, it will be used in a while
 
 Prepare your template to be overriden
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -170,6 +174,7 @@ Each template comes with one or more external assets, like javascript and styles
 are declared in a comment section as follows:
 
 .. code-block:: html+jinja
+
     {# BEGIN-EXTERNAL-STYLESHEETS
     @BusinessWebsiteThemeBundle/Resources/public/css/reset.css
     @BusinessWebsiteThemeBundle/Resources/public/css/style.css
@@ -177,10 +182,12 @@ are declared in a comment section as follows:
 
 There are four recognized sections by AlphaLemon CMS:
 
-- BEGIN-EXTERNAL-STYLESHEETS / END-EXTERNAL-STYLESHEETS
-- BEGIN-EXTERNAL-JAVASCRIPTS / END-EXTERNAL-JAVASCRIPTS
-- BEGIN-CMS-STYLESHEETS / END-CMS-STYLESHEETS
-- BEGIN-CMS-JAVASCRIPTS / END-CMS-JAVASCRIPTS
+.. code-block:: text
+
+    BEGIN-EXTERNAL-STYLESHEETS / END-EXTERNAL-STYLESHEETS
+    BEGIN-EXTERNAL-JAVASCRIPTS / END-EXTERNAL-JAVASCRIPTS
+    BEGIN-CMS-STYLESHEETS / END-CMS-STYLESHEETS
+    BEGIN-CMS-JAVASCRIPTS / END-CMS-JAVASCRIPTS
 
 The first section is used to declare the website's external stylesheets files and the second is for javascripts.
 The other two sections are used to declare respectively stylesheets ot javascripts that AlphaLemon Cms must load
@@ -217,31 +224,60 @@ Attributes must be written in valid **yml** syntax. Yml requires a perfect inden
 the other attributes:
 
 .. code-block:: html+jinja
+
     {# BEGIN-SLOT
         name: logo
-        repeated: site
-            htmlContent: |
-                <img src="/uploads/assets/media/business-website-original-logo.png" title="Progress website logo" alt="Progress website logo" />
+          repeated: site
+        htmlContent: |
+            <img src="/uploads/assets/media/business-website-original-logo.png" title="Progress website logo" alt="Progress website logo" />
     END-SLOT #}
 
-The code above will fail because the third attribute has a wrong indentation.
+The code above will fail because the second attribute has a wrong indentation. When
+this happens, the section is skipped and the service is not instantiated.
 
-The **name** option is mandatory and when it is omitted the slot is skipped. The accepted values for
-attributes are the following ones:
+The **name** option is mandatory and when it is omitted the slot is skipped.
 
-- repeated
-- blockType
-- htmlContent
+Addictional optional arguments
+------------------------------
 
-The **repeated** attribute tells AlphaLemon how to repeate the block through the website's pages,
-the **blockType** is the type of block to add to the slot and the **htmlContent* is the default
-html code added to the block when a new one is added to the page. You may learn more on [ BLOCKS ]
-chapter.
+In addiction to **name** option, there are some attributes you could define:
+
+1. blockType
+2. htmlContent
+3. repeated
+
+The blockType option
+~~~~~~~~~~~~~~~~~~~~
+
+Defines the block type that AlphaLemon CMS must add for that slot, when a new page is added. By default, the block type
+added is Text.
+
+The htmlContent option
+~~~~~~~~~~~~~~~~~~~~~~
+
+the **htmlContent** option overrides the default content added by the block type, so when you need to use the
+default value added by the block, simply don't declare this option.
+
+The repeated option
+~~~~~~~~~~~~~~~~~~~
+
+Most of the contents displayed on a web page are repeated through the website pages. For example the site logo
+usually is the same for all the site's pages, while a navigation menu is the same for a specific language.
+
+The repeated option manages this behavior and repeats the content for the blocks that live on a slot. The
+possibile values for this option are:
+
+1. page (default)
+2. language
+3. site
+
+When this argument is not declared, a block repeated at page level is added.
 
 None of them is required, but when you don't need to specify any attribute, you must however
 define the section:
 
 .. code-block:: html+jinja
+
     {# BEGIN-SLOT
         name: logo
     END-SLOT #}
@@ -260,8 +296,8 @@ at the begininng of this tutorial:
 
     alphalemon:generate:themplates
 
-This command will generate the config files that defines the theme's templates. If there's something
-wrong, a notice is displayed.
+This command will generate the config files that defines the theme's templates and their slots. If
+there's something goes wrong, a notice is displayed.
 
 Override a template
 -------------------
@@ -285,3 +321,5 @@ of your application than add a new **home.twig.html**, open it and add the follo
 
 This code overrides the **AwesomeThemeBundle's home.html.twig** template replacing the **left_sidebar** slot with the contents saved with the **top_section_1** slot
 you have filled in your previous **home.twig.html** template.
+
+.. _`themes internal configuration`: the-internals-of-theme-configuration

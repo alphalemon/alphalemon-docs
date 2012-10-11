@@ -1,14 +1,17 @@
-Add a custom Theme-App to AlphaLemon CMS
-========================================
+The internals of themes configuration
+=====================================
 
-This chapter will explain the internals of an App-Theme.
+This chapter will explain the internals of an App-Theme and refers to **BusinessWebsiteThemeBundle**,
+the default theme that comes with AlphaLemon CMS.
 
 The Theme service
 -----------------
 
 An AlphaLemon CMS theme is defined as a service in the DIC **Dependency Injector Container** and its definition
-is saved into the **Resources/config** folder as xml file, named [bundle_name_extension_alias].xml, so a theme
-named BusinessWebsiteThemeBundle is named business_website_theme.
+is saved into the **Resources/config** folder as xml file.
+
+This file is named **[bundle_name_extension_alias].xml**, so the **BusinessWebsiteThemeBundle**
+has an alias named **business_website_theme** which is the one used for the file name.
 
 .. code-block:: xml
 
@@ -20,21 +23,25 @@ named BusinessWebsiteThemeBundle is named business_website_theme.
         </service>
     </services>
 
-This service defines an AlTheme object and its class has already been declared in the ThemeEngine services 
-configuration and it is identified by the **%alpha_lemon_theme_engine.theme.class%** parameter.
+This service defines an **AlTheme** object and its class has already been declared in the
+ThemeEngine services configuration and it is identified by the **%alpha_lemon_theme_engine.theme.class%**
+parameter.
 
-The theme's id is defined as **[bundle_name_extension_alias].theme** and requires a string argument which 
-contains the theme's name,  **BusinessWebsiteTheme** in this case. To tell AlphaLemon that this bundle is 
-a Theme-App the service is tagged as **alpha_lemon_theme_engine.themes.theme**.
+The theme's id is defined as **[bundle_name_extension_alias].theme** and requires a
+string argument which contains the theme's name without the Bundle extension, so
+**BusinessWebsiteTheme** in this case.
+
+To define this bundle as a Theme-App, the service has been tagged as
+**alpha_lemon_theme_engine.themes.theme**.
 
 The template service
 --------------------
 
-A Template is defined as an xml file saved under a dedicated folder under the **Resources/config** directory, 
+A Template is defined as an xml file saved under a dedicated folder under the **Resources/config** directory,
 named **templates**. Let's see how the BusinessWebsiteThemeBundle's home template is defined:
 
 .. code-block:: xml
-    
+
     <parameters>
         <parameter key="business_website.home.external_stylesheets.cms" type="collection">
             <parameter>@BusinessWebsiteThemeBundle/Resources/public/css/cms_fix.css</parameter>
@@ -94,8 +101,9 @@ and an optional parameter. Let's see in detail.
 The template service
 ~~~~~~~~~~~~~~~~~~~~
 
-The template service defines an AlTemplate object which class has already been declared in the ThemeEngine 
-services configuration and identified as **%alpha_lemon_theme_engine.template.class%**.
+The template service defines an **AlTemplate** object which class has already been
+declared in the ThemeEngine services configuration and is identified as
+**%alpha_lemon_theme_engine.template.class%**.
 
 .. code-block:: xml
 
@@ -116,19 +124,22 @@ services configuration and identified as **%alpha_lemon_theme_engine.template.cl
 
 The template id has been defined as **[bundle_name_extension_alias].theme.template.[template_name]**.
 
-This service requires three arguments: the symfony's kernel service, a **business_website.theme.template_assets.home** 
-service and a **business_website.theme.template.home.slots** service which are the services mentioned above, that 
-will be defined in a while.
+This service requires three arguments: the symfony's kernel service, a **business_website.theme.template_assets.home**
+service and a **business_website.theme.template.home.slots** service which are the
+services mentioned above, that will be defined in a while.
 
-The service is tagged **[bundle_name_extension_alias].theme.template**, in this example **business_website.theme.template**.
+The service is tagged as **[bundle_name_extension_alias].theme.template**, in this
+example **business_website.theme.template**.
 
-As last the **setThemeName** and **setTemplateName** methods are called to define respectly the theme's name an the template's name.
+As last the **setThemeName** and **setTemplateName** methods are called to define
+respectly the theme's name an the template's name.
 
 The template assets service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The template assets service defines an AlTemplateAssets object which class has already been declared in the ThemeEngine 
-services configuration and identified as **%alpha_lemon_theme_engine.template_assets.class%**.
+The template assets service defines an **AlTemplateAssets** object which class has
+already been declared in the ThemeEngine services configuration and identified as
+**%alpha_lemon_theme_engine.template_assets.class%**.
 
 .. code-block:: xml
 
@@ -155,12 +166,13 @@ services configuration and identified as **%alpha_lemon_theme_engine.template_as
             </call>
         </service>
 
-This object is deputated to contain and manage the assets used by the template. The template assets id has 
+This object is deputated to contain and manage the assets used by the template. The template assets id has
 been defined as **[bundle_name_extension_alias].theme.template_assets.[template_name]**.
 
-It calls the **setExternalStylesheets** method to add some external stylesheets to the template and 
-**setExternalJavascripts** to add some external javascripts. Follows all the callable methods to define 
-the template assets:
+It calls the **setExternalStylesheets** method to add some external stylesheets to the template and
+**setExternalJavascripts** to add some external javascripts.
+
+The callable methods to define the template assets are:
 
 1. setExternalStylesheets - Adds some stylesheets to the template
 2. setExternalJavascripts - Adds some javascripts to the template
@@ -170,8 +182,9 @@ the template assets:
 The template slots service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The template slots service defines an AlTemplateSlots object which class has already been declared in the ThemeEngine 
-services configuration and it is identified by the **%alpha_lemon_theme_engine.template_slots.class%** parameter.
+The template slots service defines an **AlTemplateSlots** object which class has
+already been declared in the ThemeEngine services configuration and it is identified
+by the **%alpha_lemon_theme_engine.template_slots.class%** parameter.
 
 .. code-block:: xml
 
@@ -180,21 +193,23 @@ services configuration and it is identified by the **%alpha_lemon_theme_engine.t
         <tag name="business_website.theme.template.home" />
     </service>
 
-This object is deputated to manage the template slots. Each template managed by AlphaLemon is made by slots and each 
+This object is deputated to manage the template slots. Each template managed by AlphaLemon is made by slots and each
 slot is the place where one or more blocks live.
 
 The template slots' id has been defined as **[bundle_name_extension_alias].theme.template.[template_name].slots** and
-it has been tagged as **[bundle_name_extension_alias].theme.template.home.
+it has been tagged as **[bundle_name_extension_alias].theme.template.home**.
 
 Declare the template slots
 --------------------------
 
-The last thing to do is to define the slots for each template. Each slot is a service that 
-represents an AlSlot object. The sevice's class has already been declared in the ThemeEngine services
- configuration and it is identified by the **%alpha_lemon_theme_engine.slot.class%** parameter.
+The last thing to do is to define the slots for each template.
+
+Each slot is a service that define an **AlSlot** object. The sevice's class has
+already been declared in the ThemeEngine services configuration and it is identified
+by the **%alpha_lemon_theme_engine.slot.class%** parameter.
 
 The services file has been created under the **Resources/config/templates/slots** folder of your Theme-App
-and it has been named as [template_name].xml. Follows the implementation:
+and it has been named as **[template_name].xml**. Follows the implementation:
 
 .. code-block:: xml
 
@@ -214,48 +229,14 @@ and it has been named as [template_name].xml. Follows the implementation:
         [...]
     </services>
 
-Here is represented only the implementstion for a single slot, the other follows the same rules.
+Here is represented only the implementation for a single slot, others follows the same rules.
 
 This object requires as first argument a string that defines the slot name.
 
-As saw for other services, this service must be tagged following this scheme: 
+Second argument is an array of options which are well detailed in the `add a new theme`_ chapter.
+
+As saw for other services, this service must be tagged following this scheme:
 **[bundle_name_extension_alias].theme.template.[template_name].slots**.
-
-Addictiona options for AlSlot object
-------------------------------------
-
-The AlSlot object accepts an array of options as second argumentis an optiona array of options. The possibile values are:
-
-1. blockType
-2. htmlContent
-3. repeated
-
-The blockType option
-~~~~~~~~~~~~~~~~~~~~
-
-Defines the block type that AlphaLemon CMS must add for that slot, when a new page is added. By default, the block type 
-added is Text.
-
-The htmlContent option
-~~~~~~~~~~~~~~~~~~~~~~
-
-the **htmlContent** option overrides the default content added by the block type, so when you need to use the
-default value added by the block, simply don't declare this option.
-
-The repeated option
-~~~~~~~~~~~~~~~~~~~
-
-Most of the contents displayed on a web page are repeated through the website pages. For example the site logo 
-usually is the same for all the site's pages, while a navigation menu is the same for a specific language.
-
-The repeated option manages this behavior and repeats the content for the blocks that live on a slot. The 
-possibile values for this option are:
-
-1. page (default)
-2. language
-3. site
-
-When this argument is not declared, a block repeated at page level is added.
 
 The base config file
 ~~~~~~~~~~~~~~~~~~~~
@@ -265,25 +246,36 @@ All the repeated slots are added to a common file named **base.xml**. The name i
 Register the configuration files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The configuration files must be registered in the **Dependency Injector Container**:
+At last, the configuration files must be registered in the **Dependency Injector Container**:
 
 .. code-block:: php
 
     // Acme/Theme/BusinessWebsiteThemeBundle/DependencyInjection/FancyThemeExtension.php
-    class FancyThemeExtension extends Extension
+    class BusinessWebsiteThemeExtension extends Extension
     {
         public function load(array $configs, ContainerBuilder $container)
         {
             // Register the services file
             $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-            $loader->load('fancy_theme.xml');
 
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/templates'));
+            // This code is autogenerated - DON'T CHANGE IT MANUALLY
+
+            $loader->load('business_website_theme.xml');
+
+            $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config/templates'));
+            $loader->load('rightcolumn.xml');
+            $loader->load('sixboxes.xml');
             $loader->load('home.xml');
+            $loader->load('fullpage.xml');
 
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/templates/slots'));
+            $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config/templates/slots'));
+            $loader->load('rightcolumn.xml');
+            $loader->load('sixboxes.xml');
             $loader->load('base.xml');
             $loader->load('home.xml');
+            $loader->load('fullpage.xml');
+
+            // This code is autogenerated - DON'T CHANGE IT MANUALLY
         }
 
         public function getAlias()
@@ -291,3 +283,7 @@ The configuration files must be registered in the **Dependency Injector Containe
             return 'business_website_theme';
         }
     }
+
+AlphaLemon CMS adds two placeholders to identify the autogenerated code.
+
+.. _`add a new theme`: add-a-custom-theme-to-alphalemon-cms
