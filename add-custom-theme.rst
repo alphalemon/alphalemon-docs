@@ -46,7 +46,7 @@ You'll get the following response:
 
     Bundle namespace:
 
-Answer as following:
+Answer as follows:
 
 .. code-block:: text
 
@@ -106,6 +106,26 @@ base twig template or from another custom one, so remove everything is external 
             [ JUST KEEP THIS ]
         </body>
     </html>
+	
+The twig template
+~~~~~~~~~~~~~
+Create a new twig template file called **home.html.twig** under the **Resources/views/Theme** folder, open it
+and add the following code:
+
+.. code-block:: html+jinja
+{% extends base_template %}
+
+{% block body %}
+{% endblock %}
+
+The template must extend the template defined by the **base_template** variable, which is managed by the
+ThemeEngineBundle and it must have a body **block** where the contents saved from the html template
+you are creating must be placed:
+
+.. code-block:: html+jinja
+{% block body %}
+	[ JUST KEEP THIS ]
+{% endblock %}
 
 The slots
 ~~~~~~~~~
@@ -294,7 +314,7 @@ at the begininng of this tutorial:
 
 .. code-block:: text
 
-    alphalemon:generate:themplates
+    alphalemon:generate:templates FancyThemeBundle
 
 This command will generate the config files that defines the theme's templates and their slots. If
 there's something goes wrong, a notice is displayed.
