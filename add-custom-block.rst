@@ -171,8 +171,6 @@ How to tell AlphaLemonCMS to manage the Bundle
 ----------------------------------------------
 
 An App-Block Bundle is declared as services in the **Dependency Injector Container**.
-This service must be available just only when AlphaLemon CMS is active, so when the
-**alcms** environment is in use.
 
 The command has added a configuration file named **app_block.xml** under the **Resources/config**
 folder of your bundle with the following code:
@@ -194,8 +192,10 @@ folder of your bundle with the following code:
         </service>
     </services>
 
-While the config file name is not mandatory, it is a best practice to use a separated
-configuration file to define this service.
+.. note::
+
+    While the config file name is not mandatory, it is a best practice to use a separated
+    configuration file to define this service.
 
 The command has rewritten the standard **DependencyInjection/FancyBlockExtension.php**,
 created by the default Bundles generator to load that configuration file:
@@ -234,13 +234,13 @@ The block's tag accepts serveral options:
     If you change your mind on description ad group names you chose when you run the
     command, you could change theme here mananually.
 
-The editor
-~~~~~~~~~~
+The editor configuration
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Another parameter named **fancyblock.editor_settings** has been added to the configuration
 file, to enable the AlphaLemon's CMS base editor.
 
-The key that identifies this service must be defined as **[ block type in lowercase ].editor_settings**.
+The key that identifies this service must be defined as **[ block type in lower case ].editor_settings**.
 
 This editor manages all the properties related to the content:
 
@@ -290,10 +290,10 @@ The editor
 ----------
 
 The service's configuration exposed some paragraph above is not enough to have the
-editor rendered, in fact an addiction twig template is required.
+editor rendered, in fact an addictional twig template is required.
 
-The command wizard has already been added this file for you under the **Resources/views/Block**
-folder of the FancyBlockBundle, named **fancy_block_editor.html.twig**. The rule to
+The command wizard has already added this file for you under the **Resources/views/Block**
+folder of the FancyBlockBundle and has named it **fancyblock_editor.html.twig**. The rule to
 define this name is **[block type in lower case]_editor.html.twig**
 
 The added code is really simple:
@@ -303,7 +303,7 @@ The added code is really simple:
     //  AlphaLemon/Block/FancyBlockBundle/Resources/views/fancy_block_editor.html.twig
     {% extends 'AlphaLemonCmsBundle:Block:base_editor.html.twig' %}
 
-in fact only a base twig template is defined.
+in fact it just extends the base twig template provided by AlphaLemon CMS.
 
 
 Add a custom editor
@@ -419,11 +419,13 @@ This argument is well documented in the `BootstrapBundle`_ README file.
 .. note::
 
     When you take advantage of bundles autoloading, the bundle entry in
-    **AppKernel** file must ne removed.
+    **AppKernel** file must be removed.
 
-Add the block to the Dependency Injector Container
---------------------------------------------------
-When you use your block locally, as in this example, the block manager service is always 
+
+Enable the block service only for alcms environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you use your block declared in the AppKernel, as in this example, the block manager service is always 
 loaded, but it is not needed in production, for this reason the command wizard has 
 added some configuration files, managed by the **BootstrapBundle** to avoid loading
 the block manager service in production.
@@ -439,6 +441,12 @@ folder of your bundle, with the following code:
 This configuration has been reproduced for all the **alcms** configuration files,
 so the **config_alcms.yml** to **config_alcms_dev.yml** files has been created.
 
+.. note::
+
+    If you are using a block you made with must be provate, you should always manage
+    it through composer. In this way you avoid to load a service not needed in production
+    and to semplify the sharing of your bunlde for other projects of yours.
+
 Adapt the App-Block to be distributable 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -452,8 +460,8 @@ of your old namespace to the new one:
     * old: Acme\FancyBlockBundle
     * new: AlphaLemon\Block\FancyBlockBundle
 
-Packagist as remote repository, or not
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Packagist as remote repository... or not
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Publish your Bundle to **github** then add the Bundle to `packagist`_ to let it be
 distributable by composer.
