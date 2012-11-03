@@ -7,8 +7,8 @@ What is a Block
 ---------------
 
 A Block represents a content displayed on a web page. In addiction an **App-Block**
-includes the editor to manage the block itself by AlphaLemon CMS, when the editor
-is active.
+includes the editor to manage the block itself by AlphaLemon CMS, when the page
+is in editing mode.
 
 An App-Block could still be used outside AlphaLemon CMS as web page element.
 
@@ -24,8 +24,8 @@ An App-Block is a standalone symfony2 bundle. This approach has several advantag
 Create the FancyBlockBundle
 ---------------------------
 
-Since AlphaLemon CMS beta release is provided a command that generates the addictional
-files required by an App-Block.
+Since AlphaLemon CMS beta release, a command that generates the addictional
+files required by an App-Block is provided.
 
 Run the following command from your console to generate a new App-Block bundle named
 **FancyBlockBundle** that will live under the **src** folder:
@@ -42,7 +42,7 @@ It will start the standard Symfony2 bundle generator command but will ask for so
 more information.
 
     This command has an optional **--strict** parameter that forces you to define
-    the bundle's namespace following the AlphaLemon's standard name and should be used
+    the bundle namespace following the AlphaLemon's standard name and should be used
     when you plan to distribute the App-Block.
 
 Let's see the bundle creation in detail.
@@ -79,7 +79,9 @@ The standard directory is fine:
 
     Target directory [/home/alphalemon/www/AlphaLemonCmsSandbox/src]:
 
-Choose the format you prefer:
+The generator asks you to choose the format you prefer because the standard Bundles'
+generator asks for that, but, at the moment, AlphaLemon ignores your choice and uses the
+annotation type by defaulr:
 
 .. code-block:: text
 
@@ -87,7 +89,8 @@ Choose the format you prefer:
 
     Configuration format (yml, xml, php, or annotation) [annotation]:
 
-Now you are asked for the App-Block description
+Now you are asked for the App-Block description, which is the one displayed in the
+contextual menu used to add a block to page:
 
 .. code-block:: text
 
@@ -119,7 +122,7 @@ The basis of AlBlockManager object
 AlphaLemon CMS requires you to implement a new class derived from the **AlBlockManager**
 object.
 
-This class can be placed everywhere into the FancyBlockBundle's folder, but it is a
+This class can be placed everywhere into the FancyBlockBundle folder, but it is a
 best practice to ad it under the **FancyBlockBundle/Core/Block** folder.
 
 The command just run had already added this class for you, as follows:
@@ -137,7 +140,7 @@ The command just run had already added this class for you, as follows:
     {
         public function getDefaultValue()
         {
-            return array('HtmlContent' => '<p>Default content</p>');
+            return array('Content' => '<p>Default content</p>');
         }
     }
 
@@ -171,13 +174,13 @@ An App-Block Bundle is declared as services in the **Dependency Injector Contain
 This service must be available just only when AlphaLemon CMS is active, so when the
 **alcms** environment is in use.
 
-The command added a configuration file named **app_block.xml** under the
-**Resources/config** folder of your bundle with the following code:
+The command has added a configuration file named **app_block.xml** under the **Resources/config**
+folder of your bundle with the following code:
 
 .. code-block:: xml
 
     <parameters>
-        <parameter key="fancy_block.editor_settings" type="collection">
+        <parameter key="fancyblock.editor_settings" type="collection">
             <parameter key="rich_editor">true</parameter>
         </parameter>
 
@@ -194,14 +197,27 @@ The command added a configuration file named **app_block.xml** under the
 While the config file name is not mandatory, it is a best practice to use a separated
 configuration file to define this service.
 
+The command has rewritten the standard **DependencyInjection/FancyBlockExtension.php**,
+created by the default Bundles generator to load that configuration file:
+
+.. code-block:: php
+
+    // DependencyInjection/FancyBlockExtension.php
+    public function load(array $configs, ContainerBuilder $container)
+    {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.xml');
+        $loader->load('app-block.xml');
+    }
+
 The service
 ~~~~~~~~~~~
 
 A new service named **fancy_block.block** has been declared and its class is the
 **AlBlockManagerFancyBlock** talked above.
-
-This service requires as first argument an **AlContentEventsHandler** object, defined
-by the **alpha_lemon_cms.events_handler** parameter.
 
 This service is processed by a **Compiler Pass** so it has been tagged as
 **alphalemon_cms.blocks_factory.block**.
@@ -210,7 +226,7 @@ The block's tag accepts serveral options:
 
 1. **name**: identifies the block. Must always be **alphalemon_cms.blocks_factory.block**
 2. **description**: the description that describes the block in the menu used to add a new block on the page
-3. **type**: the block's class type which **must be** the Bundle's name without the Bundle suffix
+3. **type**: the block's class type which **must be** the Bundle name without the Bundle suffix
 4. **group**: blocks that belong the same group are kept togheter and displayed one next the other in the menu used to add a new block on the page
 
 .. note::
@@ -221,10 +237,10 @@ The block's tag accepts serveral options:
 The editor
 ~~~~~~~~~~
 
-Another parameter named **fancy_block.editor_settings** has been added to the configuration
+Another parameter named **fancyblock.editor_settings** has been added to the configuration
 file, to enable the AlphaLemon's CMS base editor.
 
-The key that identifies this service must be defined as **[ extension_alias ].editor_settings**.
+The key that identifies this service must be defined as **[ block type in lowercase ].editor_settings**.
 
 This editor manages all the properties related to the content:
 
@@ -246,24 +262,10 @@ you must configure your parameter as follows:
         <parameter key="external_js">true</parameter>
     </parameter>
 
-Add the block to the Dependency Injector Container
---------------------------------------------------
-In the previous paragraph we saw that the service must be only enable in the **alcms**
-environment.  To achieve this task a new file named **config_alcms.yml** has been
-created under the **Resources/config** folder of your bundle, with the following code:
-
-.. code-block:: text
-
-    imports:
-    - { resource: "@FancyBlockBundle/Resources/config/app_block.xml" }
-
-This configuration has been reproduced for all the **alcms** configuration files,
-so the **config_alcms.yml** to **config_alcms_dev.yml** files has been created.
-
 Enabling the block
 ------------------
 
-To have the bundle work, it has been enabled in the AppKernel class:
+To have the bundle workinkg, it has been enabled in the AppKernel class:
 
 .. code-block:: php
 
@@ -278,7 +280,7 @@ To have the bundle work, it has been enabled in the AppKernel class:
         [...]
     }
 
-To check if everything is right, open AlphaLemonCMS in your browser, enter in **Edit mode**,
+To check if everything works fine, open AlphaLemonCMS in your browser, enter in **Edit mode**,
 right click on a block and verify that the **Fancy block** entry has been added to
 **Add** menu.
 
@@ -292,7 +294,7 @@ editor rendered, in fact an addiction twig template is required.
 
 The command wizard has already been added this file for you under the **Resources/views/Block**
 folder of the FancyBlockBundle, named **fancy_block_editor.html.twig**. The rule to
-define this name is **[extension_alis]_editor.html.twig**
+define this name is **[block type in lower case]_editor.html.twig**
 
 The added code is really simple:
 
@@ -304,8 +306,8 @@ The added code is really simple:
 in fact only a base twig template is defined.
 
 
-Custom editor
-~~~~~~~~~~~~~
+Add a custom editor
+~~~~~~~~~~~~~~~~~~~
 
 Sometimes you may need to add a custom editor. What you need to do is to **follow the
 naming conventions** exposed before to correctly name the editor, then add your custom
@@ -345,6 +347,50 @@ An example could be this one:
 
 which renders the ElFinder media library tool.
 
+
+Share your App-Bundle
+---------------------
+
+The Bundle just created is not shareable, because the bundle namespace is not conformed
+to AlphaLemon CMS standards.
+
+At the beginning of this chapter the **--strict** option has been presented.
+
+When the command runs with this option, it forces you to declare a namespace that follows
+this rule:
+
+    **AlphaLemon/Block/[BundleName]Bundle**
+
+When you use this option a composer.json file is created under the Bundle root folder.
+Obviously it must be manually updated to reflect your repository setting.
+
+VCS
+~~~
+
+The very first thing you need is to put your code under a **VCS tool**. You may use 
+whatever you want, but it's strongly suggested to use **git** as VCS and `github`_ 
+as remote repository.
+
+The composer.json file
+~~~~~~~~~~~~~~~~~~~~~~
+
+The Bundle is shared is by `composer`_ an awesome package manager tool. If you don't 
+know it or how it works, there is a great documentation on their site which explains 
+how to start with it.
+
+The composer.json added by the command contains this code:
+
+.. code-block:: text
+
+    {
+        "autoload": {
+            "psr-0": { "AlphaLemon\\Block\\FancyBlockBundle\\FancyBlockBundle": ""
+            }
+        },
+        "target-dir" : "AlphaLemon/Block/FancyBlockBundle",
+        "minimum-stability": "dev"
+    }
+
 Autoload your bundle
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -354,7 +400,7 @@ to add it to the AppKernel file of his application.
 For this reason AlphaLemon takes advantage of the **BootstrapBundle** that takes care
 to autoload a bundle.
 
-The command wizard has been added the autoload.json file under the Bundle's root folder.
+The command wizard has been added the autoload.json file under the Bundle root folder.
 Here's the code:
 
 .. code-block:: text
@@ -372,55 +418,31 @@ This argument is well documented in the `BootstrapBundle`_ README file.
 
 .. note::
 
-    When you take advantage of bundles autoloading, the bundle's entry in
+    When you take advantage of bundles autoloading, the bundle entry in
     **AppKernel** file must ne removed.
 
+Add the block to the Dependency Injector Container
+--------------------------------------------------
+When you use your block locally, as in this example, the block manager service is always 
+loaded, but it is not needed in production, for this reason the command wizard has 
+added some configuration files, managed by the **BootstrapBundle** to avoid loading
+the block manager service in production.
 
-Share your App-Bundle
----------------------
-
-The Bundle just created is not shareable, because the bundle's namespace is not conformed
-to AlphaLemon CMS standards.
-
-At the beginning of this chapter the **--strict** option has been presented.
-
-When the command runs with this option, it forces you to declare a namespace that follows
-this rule:
-
-    **AlphaLemon/Block/[BundleName]Bundle**
-
-When you use this option a composer.json file is created under the Bundle's root folder.
-Obviously it must be manually updated to reflect your repository setting.
-
-VCS
-~~~
-
-The very first thing you need is to put your code under a **VCS tool**. You may use whatever you want, but it's strongly suggested to
-use **git** as VCS and `github`_ as remote repository.
-
-The composer.json file
-~~~~~~~~~~~~~~~~~~~~~~
-
-The Bundle is shared is by `composer`_ an awesome package manager tool. If you don't know it or how it works, there
-is a great documentation on their site which explains how to start with it.
-
-The composer.json added by the command contains this code:
+This is made adding a new file named **config_alcms.yml** under the **Resources/config** 
+folder of your bundle, with the following code:
 
 .. code-block:: text
 
-    {
-        "autoload": {
-            "psr-0": { "AlphaLemon\\Block\\FancyBlockBundle\\FancyBlockBundle": ""
-            }
-        },
-        "target-dir" : "AlphaLemon/Block/FancyBlockBundle",
-        "minimum-stability": "dev"
-    }
+    imports:
+    - { resource: "@FancyBlockBundle/Resources/config/app_block.xml" }
 
-The composer.json file
-~~~~~~~~~~~~~~~~~~~~~~
+This configuration has been reproduced for all the **alcms** configuration files,
+so the **config_alcms.yml** to **config_alcms_dev.yml** files has been created.
 
-If you want to upgrade the bundle's namespace for the App-Block created in this tutorial,
+Adapt the App-Block to be distributable 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to upgrade the bundle namespace for the App-Block created in this tutorial,
 you must rename all the namespaces created by the bundles generator wizard to reflect
 the standard one.
 
@@ -446,8 +468,8 @@ by our packagist.
 Learn for existing App-Bundles
 ------------------------------
 
-There are several full working, well commented App-Blocks you may explore, to learn how to add advanced configuration to create a
-great App-Bundle for AlphaLemon CMS.
+There are several full working, well commented App-Blocks you may explore, to learn how 
+to add advanced configuration to create a great App-Bundle for AlphaLemon CMS.
 
 .. _`github`: http://github.com
 .. _`composer`: http://getcomposer.org
