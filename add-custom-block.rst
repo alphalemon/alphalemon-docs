@@ -41,11 +41,46 @@ Run the following command from your console to generate a new App-Block bundle n
 It will start the standard Symfony2 bundle generator command but will ask for some
 more information.
 
-    This command has an optional **--strict** parameter that forces you to define
-    the bundle namespace following the AlphaLemon's standard name and should be used
-    when you plan to distribute the App-Block.
+Naming convenctions
+~~~~~~~~~~~~~~~~~~~
 
-Let's see the bundle creation in detail.
+An AppBlock should always be created using a well defined namespace:
+
+.. code-block:: text
+
+    AlphaLemon/Block/[Bundle Name]Bundle
+
+When you follow this convenction, you get two advantages:
+
+1. The App-Block is distributable by composer
+2. The App-Block is autoloaded without changing anything
+
+If you prefer not to follow this convenctions, you must run that command with the 
+**--no-strict** options, then you must change the BundlesAutoloader  instantation 
+in your **AppKernel** file as follows:
+
+.. code-block:: php
+
+    public function registerBundles()
+    {
+        [...]
+
+        $bootstrapper = new \AlphaLemon\BootstrapBundle\Core\Autoloader\BundlesAutoloader(__DIR__, $this->getEnvironment(), $bundles, null, array([path 1], [path 2]));
+    }
+
+replacing the **[path n]** entries with the paths of your App-Blocks. 
+
+Let's suppose you want to add a new App-Block under the **src/Acme/Blocks/MyAwesomeBlockBundle** 
+folder of your application. The path to pass to the **BundlesAutoloader** is the following:
+
+.. code-block:: php
+    
+    __DIR__ . '/../src/Acme/Blocks'
+
+App-Block generation
+~~~~~~~~~~~~~~~~~~~~
+
+Let's see the bundle generation in detail.
 
 .. code-block:: text
 
@@ -58,14 +93,14 @@ Enter the bundle name, as follows:
 
 .. code-block:: text
 
-    Bundle namespace: Acme/FancyBlockBundle
+    Bundle namespace: AlphaLemon/Block/FancyBlockBundle
 
 The proposed bundle name **must be changed** to FancyBlockBundle otherwise you might
 have troubles:
 
 .. code-block:: text
 
-    Bundle name [AcmeFancyBlockBundle]: FancyBlockBundle
+    Bundle name [AlphaLemonBlockFancyBlockBundle]: FancyBlockBundle
 
     The bundle can be generated anywhere. The suggested default directory uses
     the standard conventions.
@@ -192,26 +227,9 @@ folder of your bundle with the following code:
         </service>
     </services>
 
-.. note::
-
-    While the config file name is not mandatory, it is a best practice to use a separated
-    configuration file to define this service.
-
-The command has rewritten the standard **DependencyInjection/FancyBlockExtension.php**,
-created by the default Bundles generator to load that configuration file:
-
-.. code-block:: php
-
-    // DependencyInjection/FancyBlockExtension.php
-    public function load(array $configs, ContainerBuilder $container)
-    {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
-
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
-        $loader->load('app-block.xml');
-    }
+While the config file name is not mandatory, it is a best practice to use a separated
+configuration file to define this service, to keep decoupled the configuration used 
+in production from the configuration used by AlphaLemon CMS
 
 The service
 ~~~~~~~~~~~
@@ -348,21 +366,59 @@ An example could be this one:
 which renders the ElFinder media library tool.
 
 
+Autoload your bundle
+~~~~~~~~~~~~~~~~~~~~
+
+It's quite difficult to ask a user that uses AlphaLemon CMS and wants to try your Bundle
+to add it to the AppKernel file of his application.
+
+For this reason AlphaLemon takes advantage of the **BootstrapBundle** that takes care
+to autoload a bundle.
+
+The command wizard has been added the autoload.json file under the Bundle root folder.
+Here's the code:
+
+.. code-block:: text
+
+    // autoload.json
+    {
+        "bundles" : {
+            "Acme\\FancyBlockBundle\\FancyBlockBundle" : {
+                "environments" : ["all"]
+            }
+        }
+    }
+
+This argument is well documented in the `BootstrapBundle`_ README file.
+
+
+Enable the block service only for alcms environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you use your block declared in the AppKernel, as in this example, the block manager service is always 
+loaded, but it is not needed in production, for this reason the command wizard has 
+added some configuration files, managed by the **BootstrapBundle** to avoid loading
+the block manager service in production.
+
+This is made adding a new file named **config_alcms.yml** under the **Resources/config** 
+folder of your bundle, with the following code:
+
+.. code-block:: text
+
+    imports:
+    - { resource: "@FancyBlockBundle/Resources/config/app_block.xml" }
+
+This configuration has been reproduced for all the **alcms** configuration files,
+so the **config_alcms.yml** to **config_alcms_dev.yml** files has been created.
+
 Share your App-Bundle
 ---------------------
 
-The Bundle just created is not shareable, because the bundle namespace is not conformed
-to AlphaLemon CMS standards.
+If you followed the naming conventions exposed at the beginning of this chapter, your
+App-Block is ready to be distributed.
 
-At the beginning of this chapter the **--strict** option has been presented.
-
-When the command runs with this option, it forces you to declare a namespace that follows
-this rule:
-
-    **AlphaLemon/Block/[BundleName]Bundle**
-
-When you use this option a composer.json file is created under the Bundle root folder.
-Obviously it must be manually updated to reflect your repository setting.
+A composer.json file has been created under the Bundle root folder. Obviously it must be 
+manually updated to reflect your repository setting.
 
 VCS
 ~~~
@@ -391,68 +447,12 @@ The composer.json added by the command contains this code:
         "minimum-stability": "dev"
     }
 
-Autoload your bundle
-~~~~~~~~~~~~~~~~~~~~
-
-It's quite difficult to ask a user that uses AlphaLemon CMS and wants to try your Bundle
-to add it to the AppKernel file of his application.
-
-For this reason AlphaLemon takes advantage of the **BootstrapBundle** that takes care
-to autoload a bundle.
-
-The command wizard has been added the autoload.json file under the Bundle root folder.
-Here's the code:
-
-.. code-block:: text
-
-    // autoload.json
-    {
-        "bundles" : {
-            "Acme\\FancyBlockBundle\\FancyBlockBundle" : {
-                "environments" : ["all"]
-            }
-        }
-    }
-
-This argument is well documented in the `BootstrapBundle`_ README file.
-
-.. note::
-
-    When you take advantage of bundles autoloading, the bundle entry in
-    **AppKernel** file must be removed.
-
-
-Enable the block service only for alcms environment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When you use your block declared in the AppKernel, as in this example, the block manager service is always 
-loaded, but it is not needed in production, for this reason the command wizard has 
-added some configuration files, managed by the **BootstrapBundle** to avoid loading
-the block manager service in production.
-
-This is made adding a new file named **config_alcms.yml** under the **Resources/config** 
-folder of your bundle, with the following code:
-
-.. code-block:: text
-
-    imports:
-    - { resource: "@FancyBlockBundle/Resources/config/app_block.xml" }
-
-This configuration has been reproduced for all the **alcms** configuration files,
-so the **config_alcms.yml** to **config_alcms_dev.yml** files has been created.
-
-.. note::
-
-    If you are using a block you made with must be provate, you should always manage
-    it through composer. In this way you avoid to load a service not needed in production
-    and to semplify the sharing of your bunlde for other projects of yours.
-
 Adapt the App-Block to be distributable 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you want to upgrade the bundle namespace for the App-Block created in this tutorial,
-you must rename all the namespaces created by the bundles generator wizard to reflect
-the standard one.
+If you have generated a bundle that does not follow the naming convenction, you can 
+upgrade the bundle namespace renaming all the namespaces created by the bundles generator 
+wizard.
 
 So, to rename the namespaces you may use an editor that will replace all the occourences
 of your old namespace to the new one:
