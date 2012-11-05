@@ -365,6 +365,60 @@ An example could be this one:
 
 which renders the ElFinder media library tool.
 
+Assets
+------
+
+Adding the assets required by your App-Block is quite simple, just add some parameters to 
+a configuration file.
+
+Assets must be available both in production and when AlphaLemon CMS is active, so you
+must adde them to the **services.xml** file.
+
+To add some external assets open the **Resources/config/services.xml** file and
+add the following:
+
+.. code-block:: xml
+
+    // FancyBlockBundle/Resources/config/services.xml
+    <parameters>
+        <parameter key="fancyblock.external_stylesheets" type="collection">
+            <parameter>@FancyBlockBundle/Resources/public/css/style.css</parameter>
+        </parameter>
+
+        <parameter key="fancyblock.external_javascripts" type="collection">
+            <parameter>@FancyBlockBundle/Resources/public/js/cufon-yui.js</parameter>
+            <parameter>@FancyBlockBundle/Resources/public/js/al-cufon-replace.js</parameter>
+        </parameter>
+    </parameters>
+
+So assets are added as a collection and the parameter is always named as follows:
+
+.. code-block:: text
+    
+    [block name in lower case].external_stylesheets
+    [block name in lower case].external_javascripts
+
+If you need to add one or more assets only when the editor is active, add another collection
+of assets and suffix the parameter name with **.cms**:
+
+.. code-block:: xml
+
+    <parameter key="fancyblock.external_stylesheets.cms" type="collection">
+        <parameter>@FancyBlockBundle/Resources/public/css/fancy-cms.css</parameter>
+    </parameter>
+
+If you need to use some libraries used by AlphaLemon CMS, you must link the one used 
+by AlphaLemon to avoid conficts. Those are saved in the ThemeEngineBundle and can be linked
+as follows:
+
+.. code-block:: xml
+
+    @AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery/jquery-last.min.js
+    @AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery-ui.min.js
+    @AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery.easing-1.3.js
+    @AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery.metadata.js
+    @AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery.ui.position.js
+
 
 Autoload your bundle
 ~~~~~~~~~~~~~~~~~~~~

@@ -113,19 +113,21 @@ Create a new twig template file called **home.html.twig** under the **Resources/
 and add the following code:
 
 .. code-block:: html+jinja
-{% extends base_template %}
 
-{% block body %}
-{% endblock %}
+    {% extends base_template %}
+
+    {% block body %}
+    {% endblock %}
 
 The template must extend the template defined by the **base_template** variable, which is managed by the
 ThemeEngineBundle and it must have a body **block** where the contents saved from the html template
 you are creating must be placed:
 
 .. code-block:: html+jinja
-{% block body %}
-	[ JUST KEEP THIS ]
-{% endblock %}
+
+    {% block body %}
+        [ JUST KEEP THIS ]
+    {% endblock %}
 
 The slots
 ~~~~~~~~~
