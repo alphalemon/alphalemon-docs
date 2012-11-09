@@ -164,7 +164,7 @@ base twig template or from another custom one, so remove everything is external 
     </html>
 	
 The twig template
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 Create a new twig template file called **home.html.twig** under the **Resources/views/Theme** folder, open it
 and add the following code:
 
