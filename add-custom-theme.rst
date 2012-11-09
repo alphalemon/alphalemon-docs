@@ -80,6 +80,62 @@ When the theme is created, you must start to add your twig templates to the them
 The **generate:app-theme** command, adds a new **Theme** folder under the **Resources/views**
 folder of your App-Theme bundle: your templates must be placed inside that folder.
 
+The Theme folder structure
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Theme folder could be basically structured as follows:
+
+.. code-block:: text
+
+    Theme
+        home.html.twig
+        internal.html.twig
+
+This theme has two templates, the **home** and the **internal** ones. This structure
+works for sure, but, instead of that, a real world example might probably look like 
+the following one:
+
+.. code-block:: text
+
+    Theme
+        base
+            base.html.twig
+        home.html.twig
+        internal.html.twig
+
+so a base template is saved into a theme's subfolder and it contains the common parts 
+of the website's layout, while the other two templates inherit from the base template.
+
+The theme's configuration generated from a structure like that, produces two templates
+and three slots configuration files, in fact the files saved into the theme's root folder 
+become a template file, while a slot file is generated for all the templates, plus one
+named **base.xml** that contains the common slots found in files saved into subfolders.
+
+Don't worry about the generation process for now, because it is explained in detail 
+in the next paragraphs.
+
+You might need to add more separation to templates, so your structure might look like 
+the following:
+
+.. code-block:: text
+
+    Theme
+        base
+            base.html.twig
+        support
+            template_a.html.twig
+            template_b.html.twig
+        home.html.twig
+        internal.html.twig
+        internal_1.html.twig
+
+in this case the home template might inherit from the **template_a.html.twig** and 
+the other two templates from the **template_b.html.twig** and, both of them, inherit 
+from **base.html.twig**
+
+Supposing that both the templates saved into the support folder have some slots 
+definition, that slots are merged with that found into the **base.html.twig** saved 
+into the **base.xml** file. 
+
 The design
 ~~~~~~~~~~
 

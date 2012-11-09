@@ -98,6 +98,27 @@ Permissions
 Don't forget to setup the permissions on the installation folder as explained in the
 `symfony2 setup and configuration tutorial`_
 
+What to do if something goes wrong
+----------------------------------
+The AlphaLemon CMS installer changes some configuration files of your application,
+so, if something goes wrong during the setup, you could have problems to run the install
+process again, due to the changes mentioned above.
+
+Luckily, the installer backup those files, so to fix the problem, you have simply to
+remove the files changed by the installer and restore the backupped ones.
+
+Those files are:
+
+.. code-block:: text
+
+    app/AppKernel.php
+    app/config/config.yml
+    app/config/routing.yml
+
+For all of those files, the installer creates a specular copy with the **.bak** extension
+before changing the file itself.
+
+If the bak file does not exist, it means that the file has not been changed yet.
 
 
 .. _`composer`: http://getcomposer.org
