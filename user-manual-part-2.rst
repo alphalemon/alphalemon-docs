@@ -175,7 +175,7 @@ In this module you are able to activate the theme, but this will be explained in
 dedicated tutorial.
 
 In the meanwhile, you could have a look to the `screencast`_ that shows how the new theme 
-used by the http://alphalemon,com website has been activated from the previous desing.
+used by the http://alphalemon.com website has been activated from the previous desing.
 
 Activate a theme
 ~~~~~~~~~~~~~~~~
@@ -204,7 +204,7 @@ To deploy the website, simply click the **Deploy** button on the main toolbar. A
 CMS will save the pages as twig templates, will copy the assets from the backend to the
 frontend and will generate the routes for the web site.
 
-.. _`Watch the screencast to see how pages are managed by AlphaLemon CMS`: http://alphalemon.com/screencast-pages-management
-.. _`Watch the screencast to see how languages are managed by AlphaLemon CMS`: http://alphalemon.com/screencast-languages-management
+.. _`Watch the screencast to see how pages are managed by AlphaLemon CMS`: http://alphalemon.com/alphalemon-cms-pages-management-screencast-tutorial
+.. _`Watch the screencast to see how languages are managed by AlphaLemon CMS`: http://alphalemon.com/alphalemon-cms-screencast-languages-management-tutorial
 .. _`dedicated tutorial`: http://alphalemon.com/add-a-custom-theme-to-alphalemon-cms
-.. _`screencast`: http://alphalemon.com/screencast-themes-preview
+.. _`screencast`: http://alphalemon.com/alphalemon-cms-themes-preview-screencast-tutorial

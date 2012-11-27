@@ -81,7 +81,7 @@ for that user.
 
 Users and roles management
 --------------------------
-This chapter is not ready yet.
+This section is not ready yet.
 
 Editing the website
 -------------------
@@ -130,8 +130,6 @@ blocks.
 To start edit a block, click the **Edit** button on the toolbar. This causes that the 
 editable blocks are immediaty surrounded by a red dotted border rectangle, which is
 the interface used to interact with the block itself.
-
-.. image:: //bundles/alphalemonwebsite/media/manual/blocks_management.jpg
 
 To perform an action on a block, you must place the cursor of your mouse inside the
 sqaure's area and click the mouse button.
@@ -239,8 +237,8 @@ in more website, without reinventig the weel each time.
 In addiction you might `share it`_ with the AlphaLemon CMS community.
 
 
-.. _`Watch the screencast to see how you can move through pages`: http://alphalemon.com/screencast-page-browsing
+.. _`Watch the screencast to see how you can move through pages`: http://alphalemon.com/alphalemon-cms-page-browsing-screencast-tutorial
 .. _`how to create a new block`: http://alphalemon.com/add-a-new-block-app-to-alphalemon-cms
 .. _`available blocks`: http://alphalemon.com/extend-your-alphalemon-cms-application-adding-new-app-blocks
-.. _`Watch the screencast to see how you can manage blocks`: http://alphalemon.com/screencast-contents-management
+.. _`Watch the screencast to see how you can manage blocks`: http://alphalemon.com/alphalemon-cms-contents-management-screencast-tutorial
 .. _`share it`: http://alphalemon.com/extend-your-alphalemon-cms-application-adding-new-app-blocks
