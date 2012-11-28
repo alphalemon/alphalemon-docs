@@ -67,7 +67,6 @@ the default language **en**, and the home page, which is named **index** by defa
 
 Authentication
 --------------
-
 The access AlphaLemon CMS you must authenticate and a default user is provided, so
 when promped, authenticate yourself using the following credentials:
 
@@ -81,7 +80,46 @@ for that user.
 
 Users and roles management
 --------------------------
-This section is not ready yet.
+To manage the users, just click the **Users** command on the toolbar. This will open 
+a dialog window where all the users of your website are listed.
+
+.. image:: //bundles/alphalemonwebsite/media/manual/users_list.jpg
+
+Add a new user
+~~~~~~~~~~~~~~
+Click the **New** button to add a new user. The user's data are loaded.
+
+.. image:: //bundles/alphalemonwebsite/media/manual/user_edit.jpg 
+
+Fill the required information and click the **Save** button. To return to the users
+list, simply click the List button.
+
+Edit an existing user
+~~~~~~~~~~~~~~~~~~~~~
+To edit a user, click on the **edit** button placed at the right of each user in the 
+users list: this will load the selected user's data and you are able to modify those
+information.
+
+Remove a user
+~~~~~~~~~~~~~
+To remove a user, click on the **delete** button placed at the right of each user in the 
+users list.
+
+The current logged user cannot be removed.
+
+Roles
+~~~~~
+Each user has a role in the website and this attribute grants it some rights over the
+application.
+
+To manage the site roles, click the **Roles** button in the users list panel. 
+
+.. image:: //bundles/alphalemonwebsite/media/manual/roles_list.jpg
+
+The management process is the same of users, so is not threated here anymore.
+
+You may learn more about how to extend the roles for your application in the `security
+tutorial`_.
 
 Editing the website
 -------------------
@@ -130,6 +168,8 @@ blocks.
 To start edit a block, click the **Edit** button on the toolbar. This causes that the 
 editable blocks are immediaty surrounded by a red dotted border rectangle, which is
 the interface used to interact with the block itself.
+
+.. image:: //bundles/alphalemonwebsite/media/manual/blocks_management.jpg
 
 To perform an action on a block, you must place the cursor of your mouse inside the
 sqaure's area and click the mouse button.
@@ -242,3 +282,4 @@ In addiction you might `share it`_ with the AlphaLemon CMS community.
 .. _`available blocks`: http://alphalemon.com/extend-your-alphalemon-cms-application-adding-new-app-blocks
 .. _`Watch the screencast to see how you can manage blocks`: http://alphalemon.com/alphalemon-cms-contents-management-screencast-tutorial
 .. _`share it`: http://alphalemon.com/extend-your-alphalemon-cms-application-adding-new-app-blocks
+.. _`security tutorial`: http://alphalemon.com/how-to-secure-alphalemon-cms
