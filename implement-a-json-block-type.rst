@@ -95,6 +95,8 @@ instead the usual **AlBlockManager**:
     // AlphaLemon/Block/BusinessCarouselBundle/Core/Block/AlBlockManagerBusinessCarousel.php
     namespace AlphaLemon\Block\BusinessCarouselBundle\Core\Block;
 
+    use AlphaLemon\AlphaLemonCmsBundle\Core\Content\Block\JsonBlock\AlBlockManagerJsonBlock;
+
     class AlBlockManagerBusinessCarousel extends AlBlockManagerJsonBlock
     {
         public function getDefaultValue()
@@ -109,12 +111,14 @@ instead the usual **AlBlockManager**:
                 }
             }';
 
-            return array('HtmlContent' => $value,
-                        'InternalJavascript' => '$(".carousel").startCarousel();');
+            return array(
+                'Content' => $value,
+                'InternalJavascript' => '$(".carousel").startCarousel();'
+            );
         }
     }
 
-The default value will add only an item, defined by the **HtmlContent** option and
+The default value will add only an item, defined by the **Content** option and
 the **InternalJavascript** manages the javascript that starts the carousel.
 
 To have your block returning the desidered output, the **getHtml** method of parent
@@ -125,6 +129,8 @@ class has been redefined:
     // AlphaLemon/Block/BusinessCarouselBundle/Core/Block/AlBlockManagerBusinessCarousel.php
     namespace AlphaLemon\Block\BusinessCarouselBundle\Core\Block;
 
+    use AlphaLemon\AlphaLemonCmsBundle\Core\Content\Block\JsonBlock\AlBlockManagerJsonBlock;
+
     class AlBlockManagerBusinessCarousel extends AlBlockManagerJsonBlock
     {
         [...]
@@ -134,7 +140,7 @@ class has been redefined:
             $elements = array();
 
             // retrives the items from the json block
-            $items = json_decode($this->alBlock->getHtmlContent());
+            $items = json_decode($this->alBlock->getContent());
 
             // Builds the html for each item
             foreach($items as $item) {

@@ -188,7 +188,7 @@ your needs.
 
 This method returns and array, which may have the following options:
 
-1. HtmlContent
+1. Content
 2. ExternalStylesheet
 3. InternalStylesheet
 4. ExternalJavascript
