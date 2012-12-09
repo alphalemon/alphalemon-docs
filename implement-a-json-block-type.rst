@@ -136,40 +136,81 @@ class has been redefined:
         [...]
         public function getHtml()
         {
-            $carousel = '';
-            $elements = array();
-
-            // retrives the items from the json block
-            $items = json_decode($this->alBlock->getContent());
-
-            // Builds the html for each item
-            foreach($items as $item) {
-                $elements[] = sprintf('<li><div>%s</div><span><strong class="color1">%s %s,</strong> <br />%s</span></li>', $item->comment, $item->name, $item->surname, $item->role);
+            if (null === $this->alBlock) {
+                return "";
             }
 
-            if (!empty($elements)) {
+            $items = $this->decodeJsonContent($this->alBlock->getContent(), true);
 
-                // Prepares the carousel
-                $carousel = '<div class="carousel_container">';
-                $carousel .= '<div class="carousel">';
-                $carousel .= sprintf('<ul>%s</ul>', implode("\n", $elements));
-                $carousel .= '</div>';
-                $carousel .= '<a href="#" class="up"></a>';
-                $carousel .= '<a href="#" class="down"></a>';
-                $carousel .= '</div>';
-            }
-            else
-            {
-                $carousel = '<p>Any item has been added</p>';
-            }
-
-            return $carousel;
+            return array(
+                "RenderView" => array(
+                    "view" => "BusinessCarouselBundle:Carousel:carousel.html.twig",
+                    "options" => array(
+                        "items" => $items,
+                    )
+                )
+            );
         }
     }
 
 The code is quite simple to understand and self explained in the code, however it
-fetches the block content, decodes it into an array of items and prepares the html
-output as the carousel wants.
+fetches the block content, decodes it into an array of items and returns an array
+specifing the template to render.
+
+This array of options must have the mandatory **RenderView** option key which must 
+contain another array with two options: the mandatory **view** option and the optional
+**options**.
+
+Sometimes it might be necessary to render more views, it this case the array should
+be formatted as follows:
+
+.. code-block:: php
+
+    return array(
+        "RenderView" => array(
+            "views" => array(
+                    array(
+                        "view" => "BusinessCarouselBundle:Carousel:carousel.html.twig",
+                        "options" => array(
+                            "items" => $items,
+                    ),
+                    array(
+                        "view" => "BusinessCarouselBundle:Carousel:carousel_1.html.twig",
+                    ),
+                )
+        )
+    );
+
+The template view
+~~~~~~~~~~~~~~~~~
+The template that renders the carousel must be added under the **Resources/views/Carousel**
+folder and it must contain the following code:
+
+.. code-block:: jinja
+
+    <div class="carousel_container">
+        <div class="carousel">
+            {% if items|length > 0 %}
+            <ul>
+                {% for item in items %}
+                <li>
+                    <div>{{ item.comment }}</div>
+                    <span>
+                        <strong class="color1">{{ item.name }} {{ item.surname }},</strong>
+                        <br />
+                        {{ item.role }}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Any item has been added</p>
+            {% endif %}
+        </div>
+        <a href="#" class="up"></a>
+        <a href="#" class="down"></a>
+    </div>
+
 
 The editor
 ----------
