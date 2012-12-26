@@ -120,3 +120,60 @@ language it would be **page_renderer.before_en_rendering** for the english langu
 .. note::
 
     When you declare a listener for a page, you must use the page name and not its permalink.
+
+Add extra assets
+----------------
+As for App-Blocks, it could be necessary add some assets for a specific listener. This
+task can be achieved simply declaring those assets as parameters in the DIC:
+
+.. code-block:: xml
+
+    <parameters>
+        <parameter key="acme_web_site.index_listener.alphalemon-cms-demo.external_javascripts" type="collection">            
+            <parameter>@AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery/*</parameter>
+            <parameter>@AlphaLemonWebsiteBundle/Resources/public/vendor/tw-bootstrap/modals/js/bootstrap.min.js</parameter>
+        </parameter>
+        <parameter key="acme_web_site.index_listener.alphalemon-cms-demo.external_stylesheets" type="collection">
+            <parameter>@AlphaLemonWebsiteBundle/Resources/public/vendor/tw-bootstrap/modals/css/bootstrap.min.css</parameter>
+        </parameter>
+    </parameters>
+
+This configuration adds **twitter bootstrap** and **jquery** to **alphalemon-cms-demo** 
+page.
+
+The rule to define the parameter's key is the following:
+
+.. code-block:: text
+
+    [listener name].[page name].[asset type]
+
+in our example
+
+.. code-block:: text
+
+    acme_web_site.index_listener.alphalemon-cms-demo.external_javascripts
+    acme_web_site.index_listener.alphalemon-cms-demo.external_stylesheets
+
+Assets are saved into the public folder of the **AlphaLemonWebsiteBundle**:
+
+.. code-block:: text
+
+    @AlphaLemonWebsiteBundle/Resources/public/vendor/tw-bootstrap/modals/css/bootstrap.min.css
+
+
+This configuration adds the assets only in the declared page, **alphalemon-cms-demo** 
+as well, but you learned that contents can be replaced for all the pages or for language
+and this architecture is followed for assets too.
+
+So, to add assets for all pages your parameter's key will be:
+
+.. code-block:: text
+
+    [listener name].page.[asset type]
+
+and for language
+
+
+.. code-block:: text
+
+    [listener name].[language name].[asset type]
