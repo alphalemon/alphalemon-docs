@@ -4,7 +4,7 @@ AlphaLemon CMS installation procedure
 AlphaLemon CMS is distributed using `composer`_, so the first thing to do is to get
 composer.
 
-.. note:
+.. note::
 
     This tutorial explains how to install AlphaLemon CMS into an existing project
     which dependencies are managed by composer.
@@ -27,7 +27,8 @@ command to download composer:
 Add AlphaLemon to your composer.json file
 -----------------------------------------
 
-Open your composer .json file and add the following code:
+AlphaLemon CMS requires a full working Symfony 2.1 application, so download the latest
+Symfony2 release then open the composer.json file and add the following code:
 
 .. code-block:: text
 
@@ -36,13 +37,19 @@ Open your composer .json file and add the following code:
             {
                 "type": "composer",
                 "url": "http://apps.alphalemon.com/"
+            },
+            {
+                "type": "git",
+                "url": "https://github.com/alphalemon/common"
             }
         ],
         "require": {
             "alphalemon/alphalemon-cms-bundle": "dev-master",
-            "alphalemon/alphalemon-cms-installer-bundle": "dev-master"
+            "alphalemon/alphalemon-cms-installer-bundle": "dev-master",
+            "doctrine/common": "dev-bugfix as 2.3.0"
         }
     }
+
 
 Install AlphaLemon CMS
 ----------------------
@@ -60,6 +67,62 @@ AlphaLemon CMS setup
 AlphaLemonCMS requires several steps to be accomplished to properly setup the CMS itself. Luckily
 the **AlphaLemonCmsInstallerBundle** will do all the job for you, providing a web installer interface
 or an interactive symfony2 command to install AlphaLemonCMS.
+
+
+Install other dependencies
+--------------------------
+
+AlphaLemon CMS requires `tinyMCE`_ installed into the **web/js** folder, so grab 
+and unpack it into that directory.
+
+.. note::
+
+    The **web/js** folder does not exist when you start a Symfony2 application from
+    the scratch, so you need to create it by yourself.
+
+    The tinyMCE package contains the required **tiny_mce** library under the **tinymce/jscripts/** 
+    Be sure to unpack directy that library under the **web/js** folder.
+
+AlphaLemon CMS requires by default the `yui compressor`_ which is useful to compact 
+your assets into one, reducing page time loading. Grab and unpack it into the **app/Resources/java**
+folder and rename it **yuicompressor.jar**.
+
+.. note::
+
+    The compiled yuicompressor is saved into the package's **build** folder.
+
+    The **java** folder does not exist and must be created.
+
+
+While it's strongly suggested to use this tool, you may not install it. In this case
+you must add the following configuration to your **alcms_config.yml** file:
+
+.. code-block:: text
+
+    app/config/alcms_config.yml
+
+    alpha_lemon_cms:
+        enable_yui_compressor: false
+
+.. note::
+
+    The **alcms_config.yml** is created into the app/config folder by the AlphaLemon CMS
+    installer, so you must install the CMS then add the configuration just exposed.
+
+The deploy bundle
+-----------------
+
+From the Symfony2 book:
+
+    Before you begin, you'll need to create a bundle. Learn more from this topic
+    from the `Symfony2 book`_
+
+AlphaLemon CMS does not add anything new to Symfony2, so it requires you to create 
+that bundle too.
+
+By default AlphaLemon CMS looks for the **Acme/WebSite** bundle. Obviously you can
+choose the name you wish for your bundle: the AlphaLemon CMS installer will ask for
+it.
 
 
 Installing from the console
@@ -148,3 +211,6 @@ If the bak file does not exist, it means that the file has not been changed yet.
 .. _`composer`: http://getcomposer.org
 .. _`AlphaLemon CMS sandbox`: http://github.com/AlphaLemonCmsSandbox
 .. _`symfony2 setup and configuration tutorial`: http://symfony.com/doc/current/book/installation.html#configuration-and-setup
+.. _`tinyMCE`: http://www.tinymce.com/download/download.php
+.. _`yui compressor`: https://github.com/yui/yuicompressor/downloads
+.. _`Symfony2 book`: http://symfony.com/doc/current/book/page_creation.html#before-you-begin-create-the-bundle
