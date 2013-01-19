@@ -51,7 +51,6 @@ Symfony2 release then open the composer.json file and add the following code:
         "minimum-stability": "dev",
     }
 
-
 Install AlphaLemon CMS
 ----------------------
 
@@ -124,6 +123,25 @@ that bundle too.
 By default AlphaLemon CMS looks for the **Acme/WebSite** bundle. Obviously you can
 choose the name you wish for your bundle: the AlphaLemon CMS installer will ask for
 it.
+
+Add the AlphaLemon CMS installer bundle to AppKernel
+----------------------------------------------------
+
+To enable the AlphaLemon CMS installer you must add it to your AppKernel file:
+
+.. code-block:: php
+
+    //app/AppKernel.php
+
+    public function registerBundles()
+    {
+        $bundles = array(
+
+            [...]
+            
+            new AlphaLemon\CmsInstallerBundle\AlphaLemonCmsInstallerBundle(),
+        );
+    }
 
 
 Installing from the console
