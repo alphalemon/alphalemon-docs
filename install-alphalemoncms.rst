@@ -95,18 +95,18 @@ folder and rename it **yuicompressor.jar**.
 
 
 While it's strongly suggested to use this tool, you may not install it. In this case
-you must add the following configuration to your **alcms_config.yml** file:
+you must add the following configuration to your **config_alcms.yml** file:
 
 .. code-block:: text
 
-    app/config/alcms_config.yml
+    app/config/config_alcms.yml
 
     alpha_lemon_cms:
         enable_yui_compressor: false
 
 .. note::
 
-    The **alcms_config.yml** is created into the app/config folder by the AlphaLemon CMS
+    The **config_alcms.yml** is created into the app/config folder by the AlphaLemon CMS
     installer, so you must install the CMS then add the configuration just exposed.
 
 The deploy bundle
@@ -137,11 +137,26 @@ To enable the AlphaLemon CMS installer you must add it to your AppKernel file:
     {
         $bundles = array(
 
-            [...]
+            [...]   
             
             new AlphaLemon\CmsInstallerBundle\AlphaLemonCmsInstallerBundle(),
         );
     }
+
+Add the installer routes for web interface
+------------------------------------------
+At last, if you are going to use the web interface, you must add the routes for the
+install bundle:
+
+.. code-block:: text
+    
+    // app/config/routing.yml
+    _AlphaLemonCmsInstallerBundle:
+        resource: "@AlphaLemonCmsInstallerBundle/Resources/config/routing.yml"
+
+.. note::
+
+    This setting is not required if you install using the console.
 
 
 Installing from the console
