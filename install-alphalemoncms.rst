@@ -174,6 +174,7 @@ file:
 
 .. code-block:: text
 
+    // app/config/config_alcms.yml
     alpha_lemon_cms:
         deploy_bundle:
           controller: Site
