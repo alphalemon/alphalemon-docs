@@ -47,7 +47,8 @@ Symfony2 release then open the composer.json file and add the following code:
             "alphalemon/alphalemon-cms-bundle": "dev-master",
             "alphalemon/alphalemon-cms-installer-bundle": "dev-master",
             "doctrine/common": "dev-bugfix as 2.3.0"
-        }
+        },
+        "minimum-stability": "dev",
     }
 
 
