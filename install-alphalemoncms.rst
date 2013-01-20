@@ -41,15 +41,26 @@ Symfony2 release then open the composer.json file and add the following code:
             {
                 "type": "git",
                 "url": "https://github.com/alphalemon/common"
+            },
+            {
+                "type": "git",
+                "url": "https://github.com/alphalemon/Propel"
             }
         ],
         "require": {
-            "alphalemon/alphalemon-cms-bundle": "dev-master",
-            "alphalemon/alphalemon-cms-installer-bundle": "dev-master",
+            "alphalemon/alphalemon-cms-bundle": "1.0.*",
+            "alphalemon/alphalemon-cms-installer-bundle": "1.0.*",
             "doctrine/common": "dev-bugfix as 2.3.0"
         },
         "minimum-stability": "dev",
     }
+
+.. note::
+
+    There's a bug in **doctrine/common** that causes the AlphaLemon CMS tests fail.
+    If you don't plan to run the test suit, you can safety remove that dependency.
+
+    The propel dependency will be removed when the 1.6.8 version will be released.
 
 Install AlphaLemon CMS
 ----------------------
@@ -175,6 +186,7 @@ file:
 .. code-block:: text
 
     // app/config/config_alcms.yml
+
     alpha_lemon_cms:
         deploy_bundle:
           controller: Site
@@ -244,6 +256,45 @@ Permissions
 -----------
 Don't forget to setup the permissions on the installation folder as explained in the
 `symfony2 setup and configuration tutorial`_
+
+Remove the AcmeDemoBundle
+-------------------------
+Symfony2 comes with a built-in demo which must be removed:
+
+Delete the **src/Acme/DemoBundle** folder.
+
+Delete the following code from **app/AppKernel.php**
+
+.. code-block:: php
+
+    // app/AppKernel.php
+    $bundles[] = new Acme\DemoBundle\AcmeDemoBundle();
+
+
+Delete the following code from **app/config/routing_dev.yml**
+
+.. code-block:: text
+
+    # app/config/routing_dev.yml
+    _welcome:
+        pattern: /
+        defaults: { _controller: AcmeDemoBundle:Welcome:index }
+
+    _demo_secured:
+        resource: "@AcmeDemoBundle/Controller/SecuredController.php"
+        type: annotation
+
+    _demo:
+        resource: "@AcmeDemoBundle/Controller/DemoController.php"
+        type: annotation
+        prefix: /demo
+
+
+Clear your cache:
+
+.. code-block:: text
+
+    php app/console cache:clear
 
 
 What to do if something goes wrong
