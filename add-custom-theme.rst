@@ -3,19 +3,19 @@ Add a custom Theme-App to AlphaLemon CMS
 
 This chapter explains how to add a new theme AlphaLemon CMS.
 
-What is a Theme
+What is a Theme?
 ---------------
 
 An AlphaLemon CMS Theme Application could be defined as a collection of twig templates which have their own assets like
 javascripts, stylesheets and images, packaged into a well-known structure, that defines a website design.
 
-How is structured a Theme
+How is a Theme-App structured?
 -------------------------
 
-A Theme-App is a standalone symfony2 bundle. This approach has several advantages:
+A Theme-App is a standalone Symfony2 bundle. Using this approach has several advantages:
 
-1. Is a Symfony2 Bundle
-2. Is reusable in many web sites
+1. It is a Symfony2 Bundle
+2. It is reusable in many web sites
 3. Assets required by the content are packed into a well known structure
 
 Create the FancyThemeBundle
@@ -25,7 +25,7 @@ Alphalemon has two built-in commands which help to add a new theme:
 - **alphalemon:generate:app-theme**
 - **alphalemon:generate:themplates**
 
-The first command generate a new App-Theme Bundle, the second one generate the templates configuration files.
+The first command generates a new App-Theme Bundle, the second one generate the templates configuration files.
 
 To start a new theme, you must run the **alphalemon:generate:app-theme** command from your console.
 
@@ -52,19 +52,19 @@ Answer as follows:
 
     Bundle namespace: Acme/Theme/FancyThemeBundle
 
-The proposed bundle name **must be changed** to FancyThemeBundle otherwise you might have troubles:
+The proposed bundle name **must be changed** to FancyThemeBundle otherwise you may have trouble:
 
 .. code-block:: text
 
     Bundle name [AcmeThemeFancyThemeBundle]: FancyThemeBundle
 
-Next options could be left as proposed or you may change them to fit your needs.
+The following options could be left as default values, but you can also change them to fit your needs.
 
-Don't forget to let the command updates the AppKernel for you to enable the bundle.
+Don't forget to let the command update the AppKernel for you to enable the bundle.
 
 .. note::
 
-    This command does not manipulates the site's routes.
+    This command does not manipulate the sites routes.
 
 Your first App-Theme has been created, but, wait a moment, way a new command if
 the creation procedure is the same of a normal bundle?
@@ -90,9 +90,9 @@ The Theme folder could be basically structured as follows:
         home.html.twig
         internal.html.twig
 
-This theme has two templates, the **home** and the **internal** ones. This structure
-works for sure, but, instead of that, a real world example might probably look like 
-the following one:
+This theme has two templates, the **home** and the **internal** ones. This structure will definitely
+work, but, instead of that, a real world example would probably look more like 
+the following:
 
 .. code-block:: text
 
@@ -145,8 +145,8 @@ you must write them to twig.
 Clean the template
 ~~~~~~~~~~~~~~~~~~
 
-First of all the template does not need the header section because it is inherited by the symfony's
-base twig template or from another custom one, so remove everything is external to the body tag:
+First of all the template does not need the header section because it is inherited by the Symfony's
+base twig template or from another custom one, so remove everything that is external to the body tag:
 
 .. code-block:: html
 
@@ -165,7 +165,7 @@ base twig template or from another custom one, so remove everything is external 
 	
 The twig template
 ~~~~~~~~~~~~~~~~~
-Create a new twig template file called **home.html.twig** under the **Resources/views/Theme** folder, open it
+Create a new twig template file called **home.html.twig** under the **Resources/views/Theme** folder. Open it
 and add the following code:
 
 .. code-block:: html+jinja
@@ -175,7 +175,7 @@ and add the following code:
     {% block body %}
     {% endblock %}
 
-The template must extend the template defined by the **base_template** variable, which is managed by the
+The template must extend the template defined by the **base_template** variable. This is managed by the
 ThemeEngineBundle and it must have a body **block** where the contents saved from the html template
 you are creating must be placed:
 
@@ -214,7 +214,7 @@ with a built-in twig function called **renderSlot**:
 
 This function requires a string as argument which is the name of the slot.
 
-The id assigned to the slot is not mandatory, so you could name it as you prefer, but it is best practice to
+The id assigned to the slot is not mandatory, so you could name it however you wish, but it is best practice to
 name the slot's id and the slot name in the same way.
 
 Another best practice to follow is to use the **renderSlot** function inside a **div** tag, so avoid something like this:
@@ -267,16 +267,16 @@ There are four recognized sections by AlphaLemon CMS:
     BEGIN-CMS-STYLESHEETS / END-CMS-STYLESHEETS
     BEGIN-CMS-JAVASCRIPTS / END-CMS-JAVASCRIPTS
 
-The first section is used to declare the website's external stylesheets files and the second is for javascripts.
-The other two sections are used to declare respectively stylesheets ot javascripts that AlphaLemon Cms must load
+The first sections are used to declare the website's external stylesheets files, and the second is for javascripts.
+The other two sections are used respectively to declare stylesheets or javascripts that AlphaLemon Cms must load
 only when the CMS is active.
 
-Those section should be added at the top of the page and none of them is mandatory.
+These sections should be added at the top of the page, although none of them are mandatory.
 
 Define the slot attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To define the attributes of each slot you must add a comment which contains those attributes as follows:
+To define the attributes of each slot you must add a comment which contains the attributes that follow:
 
 .. code-block:: html+jinja
 
@@ -295,10 +295,10 @@ To define the attributes of each slot you must add a comment which contains thos
     </div>
     [...]
 
-Let's explain carefully. Each attribute section must start with **BEGIN-SLOT** directive and closed by the
+Let's explain carefully. Each attribute section must start with the **BEGIN-SLOT** directive and close with the
 **END-SLOT** directive.
 
-Attributes must be written in valid **yml** syntax. Yml requires a perfect indentation, so the first line defines the intentation for
+Attributes must be written in valid **yml** syntax. Yml requires a perfect indentation, so the first line defines the indentation for
 the other attributes:
 
 .. code-block:: html+jinja
@@ -315,7 +315,7 @@ this happens, the section is skipped and the service is not instantiated.
 
 The **name** option is mandatory and when it is omitted the slot is skipped.
 
-Addictional optional arguments
+Additional optional arguments
 ------------------------------
 
 In addiction to **name** option, there are some attributes you could define:
@@ -327,23 +327,23 @@ In addiction to **name** option, there are some attributes you could define:
 The blockType option
 ~~~~~~~~~~~~~~~~~~~~
 
-Defines the block type that AlphaLemon CMS must add for that slot, when a new page is added. By default, the block type
+Defines the block type that AlphaLemon CMS must add for that slot when a new page is added. By default, the block type
 added is Text.
 
 The htmlContent option
 ~~~~~~~~~~~~~~~~~~~~~~
 
-the **htmlContent** option overrides the default content added by the block type, so when you need to use the
+The **htmlContent** option overrides the default content added by the block type, so when you need to use the
 default value added by the block, simply don't declare this option.
 
 The repeated option
 ~~~~~~~~~~~~~~~~~~~
 
 Most of the contents displayed on a web page are repeated through the website pages. For example the site logo
-usually is the same for all the site's pages, while a navigation menu is the same for a specific language.
+is usually the same for all the site's pages, while a navigation menu is the same for a specific language.
 
-The repeated option manages this behavior and repeats the content for the blocks that live on a slot. The
-possibile values for this option are:
+The repeated option manages this behaviour and repeats the content for the blocks that live on a slot. The
+possible values for this option are:
 
 1. page (default)
 2. language
@@ -351,7 +351,7 @@ possibile values for this option are:
 
 When this argument is not declared, a block repeated at page level is added.
 
-None of them is required, but when you don't need to specify any attribute, you must however
+None of them is required, but when you don't need to specify any attribute, you must make sure you
 define the section:
 
 .. code-block:: html+jinja
@@ -361,36 +361,35 @@ define the section:
     END-SLOT #}
 
 
-While this comments could be placed everywhere on your template, it's strongly suggested to place it
+While this comment could be placed everywhere on your template, it's strongly suggested to place it
 above the **renderSlot** call.
 
 
-Let the magic starts
+Let the magic begin
 ~~~~~~~~~~~~~~~~~~~~
-When your templates are ready, you may let the magic starts, running the second command exposed
-at the begininng of this tutorial:
+When your templates are ready, you may let the magic begin, running the second command given
+at the beginning of this tutorial:
 
 .. code-block:: text
 
     alphalemon:generate:templates FancyThemeBundle
 
-This command will generate the config files that defines the theme's templates and their slots. If
-there's something goes wrong, a notice is displayed.
+This command will generate the config files that define the theme's templates and their slots. If something goes wrong, a notice is displayed.
 
-Override a template
+Overriding a template
 -------------------
 
 Let's assume that you want to use a new theme, called **AwesomeThemeBundle** and that this theme has two templates, named home.twig.html and internal.twig.html.
 
-When the **renderSlot** function has been explained, it has been presented as best practice to adopt for distributable themes, to wrap the render block function
+When the **renderSlot** function has been explained, it is best practice to adopt for distributable themes, to wrap the render block function
 with a block section to let the template overridable.
 
-To override a template, simple create a new folder called as the new theme you want to use, so **AwesomeThemeBundle**, under the **app/Resources/views** folder
-of your application than add a new **home.twig.html**, open it and add the following code:
+To override a template, simply create a new folder named as the new theme you want to use, so **AwesomeThemeBundle**, under the **app/Resources/views** folder
+of your application than add a new **home.twig.html**. Open it and add the following code:
 
 .. code-block:: jinja
 
-    // app/Resources/views/AwesomeThemeBundle/home.twig.html
+    // app/Resources/views/AwesomeThemeBundle/home.html.twig
     {% extends 'AwesomeThemeBundle:Theme:home.html.twig' %}
 
     {% block left_sidebar %}
@@ -398,6 +397,6 @@ of your application than add a new **home.twig.html**, open it and add the follo
     {% endblock %}
 
 This code overrides the **AwesomeThemeBundle's home.html.twig** template replacing the **left_sidebar** slot with the contents saved with the **top_section_1** slot
-you have filled in your previous **home.twig.html** template.
+you have filled in your previous **home.html.twig** template.
 
 .. _`themes internal configuration`: the-internals-of-theme-configuration

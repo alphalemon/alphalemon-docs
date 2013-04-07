@@ -1,34 +1,34 @@
-Change the contents of a slot dinamically
+Change the contents of a slot dynamically
 =========================================
 
-AlphaLemon CMS lets you add the website contents directly on the web page you are editing in the backend. Those contents are written as
-twig templates when are deployed to the production environment.
+AlphaLemon CMS allows you to add the website contents directly onto the web page you are editing in the backend. This content is written as
+twig templates when they are deployed to the production environment.
 
-Sometimes you may need to add a content that displays some data retrieved by a database, or a contact form that must display the form itself to let the
-website visitor adding the required information, then process those data and, at last, display a proper message based on the form process result.
+Sometimes you may need to add content that displays some data retrieved by a database, or a contact form that must display the form itself to let the
+website visitor add the required information. This would then process the data in order to display a proper message based on the form process result.
 
-Those tasks cannot be achieved simply using the AlphaLemon CMS editor, so you would have needed something to add dinamic data to your page. This task can
-be achieved implementig a listener. Let's see how.
+Those tasks cannot be achieved simply be using the AlphaLemon CMS editor, so you would need something to add dynamic data to your page. This task can
+be achieved by implementing a listener. Let's see how.
 
 
 The rendering process
 ---------------------
 
-When AlphaLemon CMS has processed the user request and it's ready to return the response, before giving back that response dispatches a
-**BeforePageRenderingEvent** event, in this way you just need to implement a listener that listen to that event to change a content on a slot.
+When AlphaLemon CMS has processed the user request, and it's ready to return the response, before giving back that response it dispatches a
+**BeforePageRenderingEvent** event. Using this method you just need to implement a listener that listens to that event to change content on a slot.
 
-More deeply, that event is dispatched three times, following the schema proposed below:
+This event is actually dispatched three times, following the schema below:
 
 1. **page_renderer.before_page_rendering**
 2. **page_renderer.before_[current language]_rendering**
 3. **page_renderer.before_[current page]_rendering**
 
-This architecture gives you a great set of possibilities to manage your contents exactly when you need. In fact a listerner responding to the
-**page_renderer.before_page_rendering** event is executed for every page of the website, reponding to the
-**page_renderer.before_[current language]_rendering** event means that the listener is executed for every page that belongs a specific language
-and, at last, responding to the **page_renderer.before_[current page]_rendering** event means that the listener is executed only for that specific page.
+This architecture gives you a great set of possibilities to manage your contents exactly when you need. In fact a listener responding to the
+**page_renderer.before_page_rendering** event is executed for every page of the website. Responding to the
+**page_renderer.before_[current language]_rendering** event means that the listener is executed for every page that belongs to a specific language
+and, at last responds to the **page_renderer.before_[current page]_rendering** event, meaning that the listener is executed only for that specific page.
 
-Events are called in the order proposed so a specific page listener might override a content rendered at language or at site level.
+Events are called in the order proposed so a specific page listener might override content rendered at language or at site level.
 
 
 The listener
@@ -48,8 +48,8 @@ so under your deploy bundle simply add the following class:
     {
     }
 
-As you may notice the class extends the **BasePageRenderingListener** which contains all the logic required to respond the event and to
-change the slot's content. The only thing you have to do is to tell which slots to edit and the content to add or replace.
+As you may notice the class extends the **BasePageRenderingListener** which contains all the logic required to respond to the event and to
+change the slot's content. The only thing you have to do is to specify which slots to edit, and the content to add or replace.
 
 This task is achieved implementing the required protected function **renderSlotContents**, so change your class as follows:
 
@@ -74,18 +74,18 @@ This task is achieved implementing the required protected function **renderSlotC
         }
     }
 
-In the example above an AlSlotContent is instantiated then both the content and the slot name are setted and, at last, the replace method is called.
+In the example above an AlSlotContent is instantiated, then both the content and the slot name are set and, at last, the replace method is called.
 The slot is transformed into an array and returned to the base class which will replace the content contained into the **top_section_2** slot
 with the one defined in the AlSlotContent object.
 
-Sometimes it could be useful to inject a content into a slot instead replacing the existing one; in this case just call the **inject()** method instead
+Sometimes it could be useful to inject content into a slot instead of replacing the existing one; in this case just call the **inject()** method instead of
 the **replace()** one.
 
 
 Configure the listener in the DIC
 ---------------------------------
 
-This listener to be callable must be declared into the Dipendency Container Injector, so add the following code to your services.xml file:
+In order to be callable, this listener must be declared into the Dependency Container Injector, so add the following code to your services.xml file:
 
 .. code-block:: xml
 
@@ -101,21 +101,21 @@ This listener to be callable must be declared into the Dipendency Container Inje
         </service>
     </services>
 
-Declaring a service in the DIC should be a known operation, otherwise you may read about it in the Symfony2 documentation, so here, only the
-**custom tag** declaration will be explained. As you noticed, the service exposes the following tag:
+Declaring a service in the DIC should be an operation you are familiar with, otherwise you can read about it in the Symfony2 documentation. Here, only the
+**custom tag** declaration will be explained. As you will have noticed, the service exposes the following tag:
 
 .. code-block:: xml
 
     <tag name="alpha_lemon_theme_engine.event_listener" event="page_renderer.before_index_rendering" method="onPageRendering" priority="0" />
 
-The **name** option identifies the kind of event and it must be **alpha_lemon_theme_engine.event_listener**. The called method is **onPageRendering**
+The **name** option identifies the kind of event, and it must be **alpha_lemon_theme_engine.event_listener**. The called method is **onPageRendering**
 and it is defined in the parent class of your listener.
 
-More interesting is the event option, which, in this case, is **page_renderer.before_index_rendering**: this means that this listener will be
+More interesting is the event option, which in this case, is **page_renderer.before_index_rendering**: this means that this listener will be
 called only for the index page, as explained in the **The rendering process** paragraph.
 
-To have this listener work for all the site pages, the option would be **page_renderer.before_page_rendering**, while having it working for a specific
-language it would be **page_renderer.before_en_rendering** for the english language.
+To have this listener work for all the site pages, the option would be **page_renderer.before_page_rendering**. Having it working for a specific
+language it would be **page_renderer.before_en_rendering** (for English language).
 
 .. note::
 
@@ -123,7 +123,7 @@ language it would be **page_renderer.before_en_rendering** for the english langu
 
 Add extra assets
 ----------------
-As for App-Blocks, it could be necessary add some assets for a specific listener. This
+As for App-Blocks, it may be necessary to add some assets for a specific listener. This
 task can be achieved simply declaring those assets as parameters in the DIC:
 
 .. code-block:: xml
@@ -162,7 +162,7 @@ Assets are saved into the public folder of the **AlphaLemonWebsiteBundle**:
 
 
 This configuration adds the assets only in the declared page, **alphalemon-cms-demo** 
-as well, but you learned that contents can be replaced for all the pages or for language
+as well, but you have now learned that contents can be replaced for all the pages or for language,
 and this architecture is followed for assets too.
 
 So, to add assets for all pages your parameter's key will be:
