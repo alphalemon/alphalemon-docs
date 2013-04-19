@@ -6,10 +6,10 @@ composer.
 
 .. note::
 
-    This tutorial explains how to install AlphaLemon CMS into an existing project
-    which dependencies are managed by composer.
+    This tutorial explains how to install AlphaLemon CMS into an existing project,
+    in which the dependencies are managed by composer.
 
-    To start an AlphaLemon CMS project from the scratch, you should use the
+    To start an AlphaLemon CMS project from scratch, you should use the
     `AlphaLemon CMS sandbox`_.
 
 
@@ -22,6 +22,12 @@ command to download composer:
 .. code-block:: text
 
     curl -s http://getcomposer.org/installer | php
+
+If you do not have curl installed, then you can use:
+
+.. code-block:: text
+	
+	 php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
 
 
 Add AlphaLemon to your composer.json file
@@ -57,15 +63,15 @@ Symfony2 release then open the composer.json file and add the following code:
 
 .. note::
 
-    There's a bug in **doctrine/common** that causes the AlphaLemon CMS tests fail.
+    There is a bug in **doctrine/common** that causes the AlphaLemon CMS tests to fail.
     If you don't plan to run the test suit, you can safety remove that dependency.
 
-    The propel dependency will be removed when the 1.6.8 version will be released.
+    The propel dependency will be removed when the 1.6.8 version is released.
 
 Install AlphaLemon CMS
 ----------------------
 
-To install run the following command
+To install, run the following command
 
 .. code-block:: text
 
@@ -75,9 +81,9 @@ To install run the following command
 AlphaLemon CMS setup
 --------------------
 
-AlphaLemonCMS requires several steps to be accomplished to properly setup the CMS itself. Luckily
-the **AlphaLemonCmsInstallerBundle** will do all the job for you, providing a web installer interface
-or an interactive symfony2 command to install AlphaLemonCMS.
+AlphaLemonCMS requires several steps in order to properly setup the CMS itself. Luckily
+the **AlphaLemonCmsInstallerBundle** will do the full job for you, providing a web installer interface
+or an interactive Symfony2 command to install AlphaLemonCMS.
 
 
 Install other dependencies
@@ -89,23 +95,23 @@ and unpack it into that directory.
 .. note::
 
     The **web/js** folder does not exist when you start a Symfony2 application from
-    the scratch, so you need to create it by yourself.
+    scratch, so you need to create it yourself.
 
     The tinyMCE package contains the required **tiny_mce** library under the **tinymce/jscripts/** 
-    Be sure to unpack directy that library under the **web/js** folder.
+    Be sure to unpack that library directly under the **web/js** folder.
 
 AlphaLemon CMS requires by default the `yui compressor`_ which is useful to compact 
-your assets into one, reducing page time loading. Grab and unpack it into the **app/Resources/java**
+your assets into one, which reduces page time loading. Grab and unpack it into the **app/Resources/java**
 folder and rename it **yuicompressor.jar**.
 
 .. note::
 
-    The compiled yuicompressor is saved into the package's **build** folder.
+    The compiled yui compressor is saved into the package's **build** folder.
 
     The **java** folder does not exist and must be created.
 
 
-While it's strongly suggested to use this tool, you may not install it. In this case
+While it's strongly suggested to use this tool, you may not have it installed. In this case
 you must add the following configuration to your **config_alcms.yml** file:
 
 .. code-block:: text
@@ -118,22 +124,22 @@ you must add the following configuration to your **config_alcms.yml** file:
 .. note::
 
     The **config_alcms.yml** is created into the app/config folder by the AlphaLemon CMS
-    installer, so you must install the CMS then add the configuration just exposed.
+    installer, so you must install the CMS then add the configuration as shown.
 
 The deploy bundle
 -----------------
 
 From the Symfony2 book:
 
-    Before you begin, you'll need to create a bundle. Learn more from this topic
+    Before you begin, you'll need to create a bundle. Learn more about this topic
     from the `Symfony2 book`_
 
 AlphaLemon CMS does not add anything new to Symfony2, so it requires you to create 
 that bundle too.
 
 By default AlphaLemon CMS looks for the **Acme/WebSite** bundle. Obviously you can
-choose the name you wish for your bundle: the AlphaLemon CMS installer will ask for
-it.
+choose any name you wish for your bundle: the AlphaLemon CMS installer will ask you
+for this.
 
 Add the AlphaLemon CMS installer bundle to AppKernel
 ----------------------------------------------------
@@ -156,14 +162,14 @@ To enable the AlphaLemon CMS installer you must add it to your AppKernel file:
 
 Website controller
 ------------------
-Website's routes are handled in production by a single **Controller** named by default
+Websites routes are handled in production by a single **Controller** named by default
 **Website**.
 
 To have your website displayed, you must add this controller to your application. To
 achieve this task you can add a new controller or simply modify the default one added
 by Symfony. 
 
-Add a **WebSiteController.php** under the Controller folder of your bundle, open it 
+Add a **WebSiteController.php** file inside the Controller folder of your bundle. Open it 
 and add this code:
 
 .. code-block:: php
@@ -191,7 +197,7 @@ file:
         deploy_bundle:
           controller: Site
 
-Don't forget to rename the controller to **SiteController.php** change the controller's 
+Don't forget to rename the controller to **SiteController.php** and change the controller's 
 code as follows:
 
 .. code-block:: php
@@ -207,7 +213,7 @@ code as follows:
 
 Add the installer routes for web interface
 ------------------------------------------
-At last, if you are going to use the web interface, you must add the routes for the
+Finally, if you are going to use the web interface, you must add the routes for the
 install bundle:
 
 .. code-block:: text
@@ -248,14 +254,14 @@ To start AlphaLemon CMS installation, simply point your browser at:
 
     http://localhost/app_dev.php/install
 
-Provide the required information and you are done! After the process ended, a web
+Provide the required information and you are done! Once the process is complete, a web
 page is rendered with the process summary and gives you the information required
 to start.
 
 Permissions
 -----------
 Don't forget to setup the permissions on the installation folder as explained in the
-`symfony2 setup and configuration tutorial`_
+`Symfony2 setup and configuration tutorial`_
 
 Remove the AcmeDemoBundle
 -------------------------
@@ -299,12 +305,12 @@ Clear your cache:
 
 What to do if something goes wrong
 ----------------------------------
-The AlphaLemon CMS installer changes some configuration files of your application,
-so, if something goes wrong during the setup, you could have problems to run the install
-process again, due to the changes mentioned above.
+The AlphaLemon CMS installer changes some of the configuration files of your application,
+so if something goes wrong during the setup, you could have problems running the install
+process again after these changes have been implemented.
 
-Luckily, the installer backup those files, so to fix the problem, you have simply to
-remove the files changed by the installer and restore the backupped ones.
+Luckily, the installer backs up those files, so to fix the problem, you have simply to
+remove the files changed by the installer and restore the backed up ones.
 
 Those files are:
 
