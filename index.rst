@@ -5,6 +5,7 @@ The Book
     :hidden:
 
     add-custom-block
+    add-custom-block-advanced-part-1
     add-custom-theme
     change-slot-content-dinamically
     implement-a-json-block-type

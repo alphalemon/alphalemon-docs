@@ -1,7 +1,19 @@
 Add a custom App-Block to AlphaLemon CMS
 ========================================
 
-This chapter explains how to add a new App-Block to AlphaLemon CMS.
+This chapter explains how to create a custom App-Block and use it with AlphaLemon CMS. 
+In detail it explains how the create, the **BootstrapButtonTutorialBlockBundle**, which 
+lets you manage a Twitter Bootstrap button using a nice ajax interface.
+
+In this chapter you will learn:
+
+    1. How to create a new App-Block using the built-in command
+    2. How to create a new object to manage the content rendered on the page
+    3. How to create a service that handles that object
+    4. How to manage a json content instead of an html content
+    5. How to create a template to display the content
+    6. How to create an editor to manage the content
+
 
 What is a Block
 ---------------
@@ -21,14 +33,14 @@ An App-Block is a standalone symfony2 bundle. This approach has several advantag
 2. Is reusable in many web sites
 3. Assets required by the content are packed into a well known structure
 
-Create the FancyBlockBundle
----------------------------
+Create the BootstrapButtonTutorialBlockBundle
+-------------------------------------
 
-Since AlphaLemon CMS beta release, a command that generates the addictional
+Since AlphaLemon CMS 1.0 beta release, a command to generate the addictional
 files required by an App-Block is provided.
 
 Run the following command from your console to generate a new App-Block bundle named
-**FancyBlockBundle** that will live under the **src** folder:
+**BootstrapButtonTutorialBlockBundle** that will live under the **src** folder:
 
 .. code-block:: text
 
@@ -61,6 +73,7 @@ in your **AppKernel** file as follows:
 
 .. code-block:: php
 
+    // app/AppKernel.php
     public function registerBundles()
     {
         [...]
@@ -93,14 +106,14 @@ Enter the bundle name, as follows:
 
 .. code-block:: text
 
-    Bundle namespace: AlphaLemon/Block/FancyBlockBundle
+    Bundle namespace: AlphaLemon/Block/BootstrapButtonTutorialBlockBundle
 
-The proposed bundle name **must be changed** to FancyBlockBundle otherwise you might
+The proposed bundle name **must be changed** to BootstrapButtonTutorialBlockBundle otherwise you might
 have troubles:
 
 .. code-block:: text
 
-    Bundle name [AlphaLemonBlockFancyBlockBundle]: FancyBlockBundle
+    Bundle name [AlphaLemonBlockBootstrapButtonTutorialBlockBundle]: BootstrapButtonTutorialBlockBundle
 
     The bundle can be generated anywhere. The suggested default directory uses
     the standard conventions.
@@ -132,7 +145,7 @@ contextual menu used to add a block to page:
     Please enter the description that identifies your App-Block content.
     The value you enter will be displayed in the adding menu.
 
-    App-Block description: Fancy block
+    App-Block description: Button Tutorial
 
 Then you are asked for the App-Block group. App-Blocks that belongs the same group
 are kept toghter in the block adding menu.
@@ -141,8 +154,8 @@ are kept toghter in the block adding menu.
 
     Please enter the group name to keep toghether the App-Blocks that belongs that group.
 
-    App-Block group: my-group
-
+    App-Block group: bootstrap,Twitter Bootstrap
+    
 Don't forget to let the command updates the AppKernel for you to enable the bundle.
 
 .. note::
@@ -157,21 +170,22 @@ The basis of AlBlockManager object
 AlphaLemon CMS requires you to implement a new class derived from the **AlBlockManager**
 object.
 
-This class can be placed everywhere into the FancyBlockBundle folder, but it is a
-best practice to ad it under the **FancyBlockBundle/Core/Block** folder.
+This class can be placed everywhere into the bundle's folder, but it is a best practice 
+to add it insite the **[Bundle]/Core/Block** folder.
 
 The command just run had already added this class for you, as follows:
 
 .. code-block:: php
 
-    namespace Acme\FancyBlockBundle\Core\Block;
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Core/Block/AlBlockManagerBootstrapButtonTutorialBlock.php  
+    namespace AlphaLemon\BootstrapButtonTutorialBlockBundle\Core\Block;
 
     use AlphaLemon\AlphaLemonCmsBundle\Core\Content\Block\AlBlockManager;
 
     /**
-    * Description of AlBlockManagerFancyBlock
+    * Description of BootstrapButtonTutorialBlockBundle
     */
-    class AlBlockManagerFancyBlock extends AlBlockManager
+    class BootstrapButtonTutorialBlockBundle extends AlBlockManager
     {
         public function getDefaultValue()
         {
@@ -201,7 +215,12 @@ must have, when it is added to the web page.
 
     The ExternalStylesheet and ExternalJavascript must contain a string of assets
     separated by a comma value.
+    
+.. note::
 
+    This approach has been overtaken and you should use a json content. This will be 
+    explained in detail in the next paragraphs.  
+   
 How to tell AlphaLemonCMS to manage the Bundle
 ----------------------------------------------
 
@@ -212,18 +231,15 @@ folder of your bundle with the following code:
 
 .. code-block:: xml
 
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Resources/config/app_block.xml
     <parameters>
-        <parameter key="fancyblock.editor_settings" type="collection">
-            <parameter key="rich_editor">true</parameter>
-        </parameter>
-
-        <parameter key="fancy_block.block.class">Acme\FancyBlockBundle\Core\Block\AlBlockManagerFancyBlock</parameter>
+        <parameter key="bootstrap_button_tutorial_block.block.class">AlphaLemon\Block\BootstrapButtonTutorialBlockBundle\Core\Block\AlBlockManagerBootstrapButtonTutorialBlock</parameter>
     </parameters>
 
-    <services>
-        <service id="fancy_block.block" class="%fancy_block.block.class%">
+    <services>        
+        <service id="bootstrap_button_tutorial_block.block" class="%bootstrap_button_tutorial_block.block.class%">
+            <tag name="alphalemon_cms.blocks_factory.block" description="Button" type="BootstrapButtonBlock" group="bootstrap,Twitter Bootstrap" />
             <argument type="service" id="alpha_lemon_cms.events_handler" />
-            <tag name="alphalemon_cms.blocks_factory.block" description="Fancy block" type="FancyBlock" group="" />
         </service>
     </services>
 
@@ -234,11 +250,10 @@ in production from the configuration used by AlphaLemon CMS
 The service
 ~~~~~~~~~~~
 
-A new service named **fancy_block.block** has been declared and its class is the
-**AlBlockManagerFancyBlock** talked above.
+A new service named **bootstrap_button_tutorial_block.block** has been declared and adds the
+**BootstrapButtonTutorialBlockBundle** object to the **Dependency Injector Container**.
 
-This service is processed by a **Compiler Pass** so it has been tagged as
-**alphalemon_cms.blocks_factory.block**.
+This service is processed by a **Compiler Pass** so it has been tagged as **alphalemon_cms.blocks_factory.block**.
 
 The block's tag accepts serveral options:
 
@@ -251,289 +266,292 @@ The block's tag accepts serveral options:
 
     If you change your mind on description ad group names you chose when you run the
     command, you could change theme here mananually.
+        
+Json content
+------------
 
-The editor configuration
-~~~~~~~~~~~~~~~~~~~~~~~~
+There are several parameters that define the aspect of a Twitter Bootstrap button:
 
-Another parameter named **fancyblock.editor_settings** has been added to the configuration
-file, to enable the AlphaLemon's CMS base editor.
+    - The displayed text
+    - The type (primary, info, success ...)
+    - The size
+    - If it spans the parent's full width
+    - If it is disabled
+    
+The best way to save a content like this, is to define it in a json format. AlphaLemon CMS provides the 
+**AlBlockManagerJsonBlock** class that inherits from AlBlockManager to manage this kind 
+of contents. 
 
-The key that identifies this service must be defined as **[ block type in lower case ].editor_settings**.
+In addiction there is another derived class, the **AlBlockManagerJsonBlockContainer**
+class which derives from the **AlBlockManagerJsonBlock** which requires as first argument
+the container and this is the object we will use for this block.
 
-This editor manages all the properties related to the content:
-
-1. The html content (rich_editor / html_editor)
-2. The internal javascript (internal_js)
-3. The internal stylesheet (internal_css)
-4. The external javascripts (external_js)
-5. The external stylesheets (external_css)
-
-Each aspect is managed in a separate tab, so if you need to enable the section that
-manages the html editor in rich mode and the section to manage the external javascripts,
-you must configure your parameter as follows:
-
-.. code-block:: xml
-
-    // AlphaLemon/Block/FancyBlockBundle/Resources/config/service.xml
-    <parameter key="fancyblock.editor_settings" type="collection">
-        <parameter key="rich_editor">true</parameter>
-        <parameter key="external_js">true</parameter>
-    </parameter>
-
-Enabling the block
-------------------
-
-To have the bundle workinkg, it has been enabled in the AppKernel class:
+Change the AlBlockManagerBootstrapButtonTutorialBlock class as follows:
 
 .. code-block:: php
 
-    //  app/AppKernel.php
-    public function registerBundles()
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Core/Block/AlBlockManagerBootstrapButtonTutorialBlock.php
+    use AlphaLemon\AlphaLemonCmsBundle\Core\Content\Block\JsonBlock\AlBlockManagerJsonBlockContainer;
+
+    class AlBlockManagerBootstrapButtonTutorialBlock extends AlBlockManagerJsonBlockContainer
     {
-        $bundles = array(
-            [...]
-            new Acme\FancyBlockBundle\FancyBlockBundle(),
-        );
-
-        [...]
+        public function getDefaultValue()
+        {
+            $value = 
+                '
+                    {
+                        "0" : {
+                            "button_text": "Button 1",
+                            "button_type": "",
+                            "button_attribute": "",
+                            "button_tutorial_block": "",
+                            "button_enabled": ""
+                        }
+                    }
+                ';
+            
+            return array('Content' => $value);
+        }
     }
+    
+This class requires the container as first argument, so the service declaration in 
+app_block.xml must be changed as follows:
+    
+.. code-block:: xml
 
-To check if everything works fine, open AlphaLemonCMS in your browser, enter in **Edit mode**,
-right click on a block and verify that the **Fancy block** entry has been added to
-**Add** menu.
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Resources/config/app_block.xml
+    <services>        
+        <service id="bootstrap_button_tutorial_block.block" class="%bootstrap_button_tutorial_block.block.class%">
+            <tag name="alphalemon_cms.blocks_factory.block" description="Button" type="BootstrapButtonBlock" group="bootstrap,Twitter Bootstrap" />
+            <argument type="service" id="service_container" />
+        </service>
+    </services>
+    
+.. note::
+    
+    The AlBlockManagerJson by default manages a list of items. This bundle manages only
+    one item, so we could avoid to define the item 0, but the json is written to respect 
+    consistency.
 
-You made a great work since now, so, glad yourself and add the Fancy block to the page.
+Render the block's content
+--------------------------
+
+**AlBlockManager** object provides the **getHtml** method to return the html rendered 
+from the block's content. 
+
+By default this method renders the **AlphaLemonCmsBundle:Block:base_block.html.twig** view:
+
+.. code-block:: jinja
+
+    // AlphaLemon/AlphaLemonCmsBundle/Resources/views/Block/base_block.html.twig
+    {{ block is defined ? block.getContent|raw : "" }}
+    
+This simple view renders the text saved into the block's content field or returns a blank
+string when any block is given.
+
+It's quite easy to understand that this view is not so useful to render our json block,
+so we need to extend the getHtml method to render another view, but since 1.1.x release, 
+this method has been declared as **final**, so it is not overridable anymore. 
+
+Luckylly it calls the **renderhtml** protected method, the one that must be extended to render 
+a different view than the default one. 
+
+Add the following method to your AlBlockManagerBootstrapButtonTutorialBlock object:
+
+.. code-block:: php
+
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Core/Block/AlBlockManagerBootstrapButtonTutorialBlock.php
+    protected function renderHtml()
+    {
+        $items = $this->decodeJsonContent($this->alBlock->getContent());
+        
+        return array('RenderView' => array(
+            'view' => 'BootstrapButtonTutorialBlockBundle:Button:button.html.twig',
+            'options' => array('data' => $items[0]),
+        ));
+    }
+    
+This method overrides the default **renderHtml** method. Content is decoded and the
+item is passed to the **BootstrapButtonTutorialBlockBundle:Button:button.html.twig** view. This
+view will be created soon.
+
+.. note::
+
+    This change introduces a Compatibility Break with the previous release. To adapt
+    your old methods to the new object, simply replace the getHtml with the new renderHtml
+    method, respecting the method modifier.
+    
+The button template
+~~~~~~~~~~~~~~~~~~~
+
+Add the **button.html.twig** template inside the **views/Button** folder, open it and 
+paste the following code:
+
+.. code-block:: jinja
+
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Resources/views/Button/button.html.twig
+    {% set button_type = (data.button_type is defined and data.button_type) ? " " ~ data.button_type : "" %}
+    {% set button_attribute = (data.button_type is defined and data.button_type) ? " " ~ data.button_attribute : "" %}
+    {% set button_text = (data.button_text is defined and data.button_text) ? " " ~ data.button_text : "Click me" %}
+    {% set button_tutorial_block = (data.button_tutorial_block is defined and data.button_tutorial_block) ? " " ~ data.button_tutorial_block : "" %}
+    {% set button_enabled = (data.button_enabled is defined and data.button_enabled) ? " " ~ data.button_enabled : "" %}
+
+    <button class="btn{{ button_type }}{{ button_attribute }}{{ button_tutorial_block }}{{ button_enabled }}">{{ button_text }}</button>
+
+The button template is quite simple: we check if all the expected params are defined, then 
+these parameters are passed to button tag.
 
 The editor
 ----------
 
-The service's configuration exposed some paragraph above is not enough to have the
-editor rendered, in fact an addictional twig template is required.
+Since AlphaLemon CMS 1.1.x the blocks's editor is rendered into a Twitter Bootstrap
+popover. This component defines the html text into the **data-content** RDF annotation
+and, while this parameter is settable by javascript, AlphaLemon CMS uses the classical
+approach: this means that the editor is directly bundled with the content into that
+RDF annotation.
 
-The command wizard has already added this file for you under the **Resources/views/Block**
-folder of the FancyBlockBundle and has named it **fancyblock_editor.html.twig**. The rule to
-define this name is **[block type in lower case]_editor.html.twig**
-
-The added code is really simple:
-
-.. code-block:: jinja
-
-    //  AlphaLemon/Block/FancyBlockBundle/Resources/views/fancy_block_editor.html.twig
-    {% extends 'AlphaLemonCmsBundle:Block:base_editor.html.twig' %}
-
-in fact it just extends the base twig template provided by AlphaLemon CMS.
-
-
-Add a custom editor
-~~~~~~~~~~~~~~~~~~~
-
-Sometimes you may need to add a custom editor. What you need to do is to **follow the
-naming conventions** exposed before to correctly name the editor, then add your custom
-code to the editor.
-
-An example could be this one:
+To render the editor, the button's template just created must be refactored as follows:
 
 .. code-block:: jinja
 
-    {% extends 'AlphaLemonCmsBundle:Elfinder:media_library.html.twig' %}
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Resources/views/Button/button.html.twig
+    {% extends "AlphaLemonCmsBundle:Editor:base_editor.html.twig" %}
+    
+    {% set button_type = (data.button_type is defined and data.button_type) ? " " ~ data.button_type : "" %}
+    {% set button_attribute = (data.button_type is defined and data.button_type) ? " " ~ data.button_attribute : "" %}
+    {% set button_text = (data.button_text is defined and data.button_text) ? " " ~ data.button_text : "Click me" %}
+    {% set button_tutorial_block = (data.button_tutorial_block is defined and data.button_tutorial_block) ? " " ~ data.button_tutorial_block : "" %}
+    {% set button_enabled = (data.button_enabled is defined and data.button_enabled) ? " " ~ data.button_enabled : "" %}
 
-    {% block init_script %}
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function() {
-            $('<div/>').dialogelfinder({
-                url : frontController + 'backend/' + $('#al_available_languages').val() + '/al_elFinderMediaConnect',
-                lang : 'en',
-                width : 840,
-                destroyOnClose : true,
-                commandsOptions : {
-                    getfile : {
-                        onlyURL  : false,
-                    }
-                },
-                handlers: {
-                    destroy: function(event){ isEditorOpened = false;$('#al_editor_dialog').dialog('destroy').remove(); }
-                },
-                getFileCallback : function(file, fm) {
-                    $('#al_file').val(file.path);
-                    $('#al_file').EditBlock('HtmlContent');
-                    $('#al_file').val('');
-                }
-            }).dialogelfinder('instance');
-        });
-    </script>
+    {% block body %}
+    <button class="btn{{ button_type }}{{ button_attribute }}{{ button_tutorial_block }}{{ button_enabled }}" {{ editor|raw }}>{{ button_text }}</button>
     {% endblock %}
 
-which renders the ElFinder media library tool.
+The block's view extends the **base_editor.html.twig** template where the **editor**
+variable is defined.
 
-Assets
-------
+The base template simple adds the **data-editor="true"** attribute to the html
+tag that must be enabled for editing. In this case the **{{ editor|raw }}** has been 
+written into the button tag.
 
-Adding the assets required by your App-Block is quite simple, just add some parameters to 
-a configuration file.
+When the page is rendered, this attribute is replaced with the editor data.
 
-Assets must be available both in production and when AlphaLemon CMS is active, so you
-must adde them to the **services.xml** file.
+The editor template
+~~~~~~~~~~~~~~~~~~~
 
-To add some external assets open the **Resources/config/services.xml** file and
-add the following:
+The interface that manages the button attributes is designed implementing a Symfony2 
+form.
 
-.. code-block:: xml
+Add the **button_editor.html.twig** template inside the **views/Editor** folder, open it and 
+paste the following code:
 
-    // FancyBlockBundle/Resources/config/services.xml
-    <parameters>
-        <parameter key="fancyblock.external_stylesheets" type="collection">
-            <parameter>@FancyBlockBundle/Resources/public/css/style.css</parameter>
-        </parameter>
+.. code-block:: jinja
 
-        <parameter key="fancyblock.external_javascripts" type="collection">
-            <parameter>@FancyBlockBundle/Resources/public/js/cufon-yui.js</parameter>
-            <parameter>@FancyBlockBundle/Resources/public/js/al-cufon-replace.js</parameter>
-        </parameter>
-    </parameters>
-
-So assets are added as a collection and the parameter is always named as follows:
-
-.. code-block:: text
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Resources/views/Editor/button_editor.html.twig
+    <form id="al_item_form">
+        <table>
+            {% include "AlphaLemonCmsBundle:Item:_form_renderer.html.twig" %}
+            <tr>
+                <td colspan="2" style="text-align: right">
+                    <a class="al_editor_save btn btn-primary" href="#" >Save</a>
+                </td>
+            </tr>
+        </table>
+    </form>
     
-    [block name in lower case].external_stylesheets
-    [block name in lower case].external_javascripts
+The template includes the **AlphaLemonCmsBundle:Item:_form_renderer.html.twig** a template
+deputated to render a generic form and renders a button to save the changes.
 
-If you need to add one or more assets only when the editor is active, add another collection
-of assets and suffix the parameter name with **.cms**:
+.. note::
 
-.. code-block:: xml
+    AlphaLemon CMS automatically attaches an handler to **.al_editor_save** element, 
+    to save contents. In the next chapter you will learn how to override this method.
 
-    <parameter key="fancyblock.external_stylesheets.cms" type="collection">
-        <parameter>@FancyBlockBundle/Resources/public/css/fancy-cms.css</parameter>
-    </parameter>
+The editor form
+~~~~~~~~~~~~~~~
 
-If you need to use some libraries used by AlphaLemon CMS, you must link the one used 
-by AlphaLemon to avoid conficts. Those are saved in the ThemeEngineBundle and can be linked
-as follows:
+To define the form we talked above, add the **AlButtonType.php** template inside the 
+**Core/Form** folder, open it and paste the following code:
 
-.. code-block:: xml
+.. code-block:: php
 
-    @AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery/jquery-last.min.js
-    @AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery-ui.min.js
-    @AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery.easing-1.3.js
-    @AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery.metadata.js
-    @AlphaLemonThemeEngineBundle/Resources/public/js/vendor/jquery.ui.position.js
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Core/Form/AlButtonType.php
+    namespace AlphaLemon\Block\BootstrapButtonTutorialBlockBundle\Core\Form;
 
+    use AlphaLemon\AlphaLemonCmsBundle\Core\Form\JsonBlock\JsonBlockType;
+    use Symfony\Component\Form\FormBuilderInterface;
 
-Autoload your bundle
-~~~~~~~~~~~~~~~~~~~~
-
-It's quite difficult to ask a user that uses AlphaLemon CMS and wants to try your Bundle
-to add it to the AppKernel file of his application.
-
-For this reason AlphaLemon takes advantage of the **BootstrapBundle** that takes care
-to autoload a bundle.
-
-The command wizard has been added the autoload.json file under the Bundle root folder.
-Here's the code:
-
-.. code-block:: text
-
-    // autoload.json
+    class AlButtonType extends JsonBlockType
     {
-        "bundles" : {
-            "Acme\\FancyBlockBundle\\FancyBlockBundle" : {
-                "environments" : ["all"]
-            }
+        public function buildForm(FormBuilderInterface $builder, array $options)
+        {
+            parent::buildForm($builder, $options);
+            
+            $builder->add('button_text');
+            $builder->add('button_type', 'choice', array('choices' => array('' => 'base', 'btn-primary' => 'primary', 'btn-info' => 'info', 'btn-success' => 'success', 'btn-warning' => 'warning', 'btn-danger' => 'danger', 'btn-inverse' => 'inverse')));
+            $builder->add('button_attribute', 'choice', array('choices' => array("" => "normal", "btn-mini" => "mini", "btn-small" => "small", "btn-large" => "large")));
+            $builder->add('button_tutorial_block', 'choice', array('choices' => array("" => "normal", "btn-block" => "block")));
+            $builder->add('button_enabled', 'choice', array('choices' => array("" => "enabled", "disabled" => "disabled")));
         }
     }
 
-This argument is well documented in the `BootstrapBundle`_ README file.
+While it is not mandatory, you should add this form to **DIC**, so open the **app_block.xml**
+configuration file and paste the following code inside:
 
+.. code-block:: xml
 
-Enable the block service only for alcms environment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Resources/config/app_block.xml
+    <parameters>
+        [...]
 
-When you use your block declared in the AppKernel, as in this example, the block manager service is always 
-loaded, but it is not needed in production, for this reason the command wizard has 
-added some configuration files, managed by the **BootstrapBundle** to avoid loading
-the block manager service in production.
+        <parameter key="bootstrap_button_tutorial_block.form.class">AlphaLemon\Block\BootstrapButtonTutorialBlockBundle\Core\Form\AlButtonType</parameter>        
+    </parameters>
 
-This is made adding a new file named **config_alcms.yml** under the **Resources/config** 
-folder of your bundle, with the following code:
+    <services>       
+        [...]
 
-.. code-block:: text
+        <service id="bootstrap_button_tutorial_block.form" class="%bootstrap_button_tutorial_block.form.class%">
+        </service>
+    </services>
+    
+Render the editor
+~~~~~~~~~~~~~~~~~
+To render the editor we must pass this form to the editor itself. This task is achieved
+by adding the **editorParameters** method to the AlBlockManagerBootstrapButtonTutorialBlock. 
 
-    imports:
-    - { resource: "@FancyBlockBundle/Resources/config/app_block.xml" }
+This one is used to define the parameter which are passed to the editor and overrides 
+the method defined in the **AlBlockManager** object, which returns an empty array by default.
 
-This configuration has been reproduced for all the **alcms** configuration files,
-so the **config_alcms.yml** to **config_alcms_dev.yml** files has been created.
+.. code-block:: php
 
-Share your App-Bundle
----------------------
-
-If you followed the naming conventions exposed at the beginning of this chapter, your
-App-Block is ready to be distributed.
-
-A composer.json file has been created under the Bundle root folder. Obviously it must be 
-manually updated to reflect your repository setting.
-
-VCS
-~~~
-
-The very first thing you need is to put your code under a **VCS tool**. You may use 
-whatever you want, but it's strongly suggested to use **git** as VCS and `github`_ 
-as remote repository.
-
-The composer.json file
-~~~~~~~~~~~~~~~~~~~~~~
-
-The Bundle is shared is by `composer`_ an awesome package manager tool. If you don't 
-know it or how it works, there is a great documentation on their site which explains 
-how to start with it.
-
-The composer.json added by the command contains this code:
-
-.. code-block:: text
-
+    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Core/Block/AlBlockManagerBootstrapButtonTutorialBlock.php
+    public function editorParameters()
     {
-        "autoload": {
-            "psr-0": { "AlphaLemon\\Block\\FancyBlockBundle\\FancyBlockBundle": ""
-            }
-        },
-        "target-dir" : "AlphaLemon/Block/FancyBlockBundle",
-        "minimum-stability": "dev"
+        $items = $this->decodeJsonContent($this->alBlock->getContent());
+        $item = $items[0];
+        
+        $formClass = $this->container->get('bootstrap_button_tutorial_block.form');
+        $buttonForm = $this->container->get('form.factory')->create($formClass, $item);
+        
+        return array(
+            "template" => "BootstrapButtonTutorialBlockBundle:Editor:button_editor.html.twig",
+            "title" => "Button editor",
+            "form" => $buttonForm->createView(),
+        );
     }
+    
+This function generates the form and then returns an array which contains the template
+to render, the title displayed on the popover and the form.
 
-Adapt the App-Block to be distributable 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Use your App-Block
+------------------
 
-If you have generated a bundle that does not follow the naming convenction, you can 
-upgrade the bundle namespace renaming all the namespaces created by the bundles generator 
-wizard.
+To use your new App-Block, just add it to your website!
+    
+Conclusion
+----------
 
-So, to rename the namespaces you may use an editor that will replace all the occourences
-of your old namespace to the new one:
-
-    * old: Acme\FancyBlockBundle
-    * new: AlphaLemon\Block\FancyBlockBundle
-
-Packagist as remote repository... or not
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Publish your Bundle to **github** then add the Bundle to `packagist`_ to let it be
-distributable by composer.
-
-But there is a better solution instead using packagist: you should email us to add
-your bundle to our packages system, to avoid spamming packagist with bundles made
-for a specific application.
-
-So feel free to write at **info [aT] alphalemon [DoT] com** to have your bundle managed
-by our packagist.
-
-Learn for existing App-Bundles
-------------------------------
-
-There are several full working, well commented App-Blocks you may explore, to learn how 
-to add advanced configuration to create a great App-Bundle for AlphaLemon CMS.
-
-.. _`github`: http://github.com
-.. _`composer`: http://getcomposer.org
-.. _`packagist`: http://packagist.org
-.. _`BootstrapBundle`: http://github.com/alphalemon/bootstrapbundle
+After reading this chapter you should be able to create a new App-Block using the built-in 
+command, create a new object to manage the content rendered on the page, create a service 
+that handles that object, manage a json content instead of an html content, create a 
+template to display the content and create an editor to manage the content.
