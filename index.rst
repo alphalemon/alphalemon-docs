@@ -13,3 +13,4 @@ The Book
     user-manual-part-1
     user-manual-part-2
     themes-configuration-in-detail
+    alphalemon-cms-for-dummies
