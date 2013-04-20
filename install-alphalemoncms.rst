@@ -328,7 +328,7 @@ If the bak file does not exist, it means that the file has not been changed yet.
 
 .. _`composer`: http://getcomposer.org
 .. _`AlphaLemon CMS sandbox`: http://github.com/AlphaLemonCmsSandbox
-.. _`symfony2 setup and configuration tutorial`: http://symfony.com/doc/current/book/installation.html#configuration-and-setup
+.. _`Symfony2 setup and configuration tutorial`: http://symfony.com/doc/current/book/installation.html#configuration-and-setup
 .. _`tinyMCE`: http://www.tinymce.com/download/download.php
 .. _`yui compressor`: https://github.com/yui/yuicompressor/downloads
 .. _`Symfony2 book`: http://symfony.com/doc/current/book/page_creation.html#before-you-begin-create-the-bundle
