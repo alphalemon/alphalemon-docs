@@ -89,17 +89,6 @@ or an interactive Symfony2 command to install AlphaLemonCMS.
 Install other dependencies
 --------------------------
 
-AlphaLemon CMS requires `tinyMCE`_ installed into the **web/js** folder, so grab 
-and unpack it into that directory.
-
-.. note::
-
-    The **web/js** folder does not exist when you start a Symfony2 application from
-    scratch, so you need to create it yourself.
-
-    The tinyMCE package contains the required **tiny_mce** library under the **tinymce/jscripts/** 
-    Be sure to unpack that library directly under the **web/js** folder.
-
 AlphaLemon CMS requires by default the `yui compressor`_ which is useful to compact 
 your assets into one, which reduces page time loading. Grab and unpack it into the **app/Resources/java**
 folder and rename it **yuicompressor.jar**.
@@ -329,6 +318,5 @@ If the bak file does not exist, it means that the file has not been changed yet.
 .. _`composer`: http://getcomposer.org
 .. _`AlphaLemon CMS sandbox`: http://github.com/AlphaLemonCmsSandbox
 .. _`Symfony2 setup and configuration tutorial`: http://symfony.com/doc/current/book/installation.html#configuration-and-setup
-.. _`tinyMCE`: http://www.tinymce.com/download/download.php
 .. _`yui compressor`: https://github.com/yui/yuicompressor/downloads
 .. _`Symfony2 book`: http://symfony.com/doc/current/book/page_creation.html#before-you-begin-create-the-bundle
