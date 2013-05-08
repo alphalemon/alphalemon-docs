@@ -34,7 +34,7 @@ An App-Block is a standalone symfony2 bundle. This approach has several advantag
 3. Assets required by the content are packed into a well known structure
 
 Create the BootstrapButtonTutorialBlockBundle
--------------------------------------
+---------------------------------------------
 
 Since AlphaLemon CMS 1.0 beta release, a command to generate the addictional
 files required by an App-Block is provided.
@@ -162,13 +162,29 @@ Don't forget to let the command updates the AppKernel for you to enable the bund
 
     This command does not manipulates the site's routes.
 
-Well done! Your very first App-Bundle has been created!
+Well done! Your very first App-Bundle has been created! The App-Block just created is
+already usable.
 
 The basis of AlBlockManager object
 ----------------------------------
 
 AlphaLemon CMS requires you to implement a new class derived from the **AlBlockManager**
-object.
+object. This object manages a simple html content, but to define a Twitter Bootstrap button,
+we must define several parameters to manage the aspect of this block:
+
+    - The displayed text
+    - The type (primary, info, success ...)
+    - The size
+    - If it spans the parent's full width
+    - If it is disabled
+    
+The best way to manage a content like this, is to define it in a json format. AlphaLemon 
+CMS provides the  **AlBlockManagerJsonBlock** class that inherits from AlBlockManager 
+to manage this kind of contents. 
+
+In addiction there is another derived class, the **AlBlockManagerJsonBlockContainer**
+class which derives from the **AlBlockManagerJsonBlock** which requires as first argument
+the Symfony2 container: this is the object we will use for this block.
 
 This class can be placed everywhere into the bundle's folder, but it is a best practice 
 to add it insite the **[Bundle]/Core/Block** folder.
@@ -180,21 +196,40 @@ The command just run had already added this class for you, as follows:
     // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Core/Block/AlBlockManagerBootstrapButtonTutorialBlock.php  
     namespace AlphaLemon\BootstrapButtonTutorialBlockBundle\Core\Block;
 
-    use AlphaLemon\AlphaLemonCmsBundle\Core\Content\Block\AlBlockManager;
+    use AlphaLemon\AlphaLemonCmsBundle\Core\Content\Block\JsonBlock\AlBlockManagerJsonBlockContainer;
 
     /**
     * Description of BootstrapButtonTutorialBlockBundle
     */
-    class BootstrapButtonTutorialBlockBundle extends AlBlockManager
+    class BootstrapButtonTutorialBlockBundle extends AlBlockManagerJsonBlockContainer
     {
         public function getDefaultValue()
         {
-            return array('Content' => '<p>Default content</p>');
+            $value = 
+                '
+                    {
+                        "0" : {
+                            "block_text": "Default value"
+                        }
+                    }
+                ';
+
+            return array('Content' => $value);
+        }
+
+        protected function renderHtml()
+        {
+            // Examined later
+        }
+
+        public function editorParameters()
+        {
+            // Examined later
         }
     }
 
-This new object simply extends the AlBlockManager base class and implements the **getDefaultValue**
-method required by the parent object.
+This new object simply extends the **AlBlockManagerJsonBlockContainer** base class and 
+implements the **getDefaultValue** method required by the parent object.
 
 This implemented function defines the default value displayed on the web page, when
 a new content is added, with a standard value, and should obviously changed to fit
@@ -215,11 +250,6 @@ must have, when it is added to the web page.
 
     The ExternalStylesheet and ExternalJavascript must contain a string of assets
     separated by a comma value.
-    
-.. note::
-
-    This approach has been overtaken and you should use a json content. This will be 
-    explained in detail in the next paragraphs.  
    
 How to tell AlphaLemonCMS to manage the Bundle
 ----------------------------------------------
@@ -239,7 +269,7 @@ folder of your bundle with the following code:
     <services>        
         <service id="bootstrap_button_tutorial_block.block" class="%bootstrap_button_tutorial_block.block.class%">
             <tag name="alphalemon_cms.blocks_factory.block" description="Button" type="BootstrapButtonBlock" group="bootstrap,Twitter Bootstrap" />
-            <argument type="service" id="alpha_lemon_cms.events_handler" />
+            <argument type="service" id="service_container" />
         </service>
     </services>
 
@@ -267,24 +297,8 @@ The block's tag accepts serveral options:
     If you change your mind on description ad group names you chose when you run the
     command, you could change theme here mananually.
         
-Json content
-------------
-
-There are several parameters that define the aspect of a Twitter Bootstrap button:
-
-    - The displayed text
-    - The type (primary, info, success ...)
-    - The size
-    - If it spans the parent's full width
-    - If it is disabled
-    
-The best way to save a content like this, is to define it in a json format. AlphaLemon CMS provides the 
-**AlBlockManagerJsonBlock** class that inherits from AlBlockManager to manage this kind 
-of contents. 
-
-In addiction there is another derived class, the **AlBlockManagerJsonBlockContainer**
-class which derives from the **AlBlockManagerJsonBlock** which requires as first argument
-the container and this is the object we will use for this block.
+Customize the autogenerated AlBlockManagerBootstrapButtonTutorialBlock
+----------------------------------------------------------------------
 
 Change the AlBlockManagerBootstrapButtonTutorialBlock class as follows:
 
@@ -313,19 +327,6 @@ Change the AlBlockManagerBootstrapButtonTutorialBlock class as follows:
             return array('Content' => $value);
         }
     }
-    
-This class requires the container as first argument, so the service declaration in 
-app_block.xml must be changed as follows:
-    
-.. code-block:: xml
-
-    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Resources/config/app_block.xml
-    <services>        
-        <service id="bootstrap_button_tutorial_block.block" class="%bootstrap_button_tutorial_block.block.class%">
-            <tag name="alphalemon_cms.blocks_factory.block" description="Button" type="BootstrapButtonBlock" group="bootstrap,Twitter Bootstrap" />
-            <argument type="service" id="service_container" />
-        </service>
-    </services>
     
 .. note::
     
@@ -356,7 +357,7 @@ this method has been declared as **final**, so it is not overridable anymore.
 Luckylly it calls the **renderhtml** protected method, the one that must be extended to render 
 a different view than the default one. 
 
-Add the following method to your AlBlockManagerBootstrapButtonTutorialBlock object:
+This method has already been added by the command that generates the App-Block:
 
 .. code-block:: php
 
@@ -364,16 +365,27 @@ Add the following method to your AlBlockManagerBootstrapButtonTutorialBlock obje
     protected function renderHtml()
     {
         $items = $this->decodeJsonContent($this->alBlock->getContent());
-        
+
         return array('RenderView' => array(
-            'view' => 'BootstrapButtonTutorialBlockBundle:Button:button.html.twig',
-            'options' => array('data' => $items[0]),
+            'view' => 'BootstrapButtonTutorialBlockBundle:Content:bootstrapbuttontutorialblock.html.twig',
+            'options' => array('item' => $items[0]),
         ));
     }
     
 This method overrides the default **renderHtml** method. Content is decoded and the
-item is passed to the **BootstrapButtonTutorialBlockBundle:Button:button.html.twig** view. This
-view will be created soon.
+item is passed to the **BootstrapButtonTutorialBlockBundle:Content:bootstrapbuttontutorialblock.html.twig** view.
+
+Let's give a small customization. Replace the view as follows:
+
+.. code-block:: php
+
+    return array('RenderView' => array(
+        'view' => 'BootstrapButtonTutorialBlockBundle:Button:button.html.twig',
+        'options' => array('data' => $items[0]),
+    ));
+
+then rename the **views/Content** folder as **views/Button** and the template file name 
+from **bootstrapbuttontutorialblock.html.twig** to **button.html.twig**.
 
 .. note::
 
@@ -384,20 +396,41 @@ view will be created soon.
 The button template
 ~~~~~~~~~~~~~~~~~~~
 
-Add the **button.html.twig** template inside the **views/Button** folder, open it and 
-paste the following code:
+The **button.html.twig** template contains the following code:
+
+.. code-block:: jinja
+
+    {% extends "AlphaLemonCmsBundle:Editor:base_editor.html.twig" %}
+
+    {% block body %}
+
+    {# Customize this code to render your content #}
+    <div {{ editor|raw }}>{{ item.block_text }}</div>
+    
+    {% endblock %}
+
+{% endblock %}
+
+change it as follows
 
 .. code-block:: jinja
 
     // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Resources/views/Button/button.html.twig
+    {% extends "AlphaLemonCmsBundle:Editor:base_editor.html.twig" %}
+    
+    {% block body %}
+    
     {% set button_type = (data.button_type is defined and data.button_type) ? " " ~ data.button_type : "" %}
     {% set button_attribute = (data.button_type is defined and data.button_type) ? " " ~ data.button_attribute : "" %}
     {% set button_text = (data.button_text is defined and data.button_text) ? " " ~ data.button_text : "Click me" %}
     {% set button_tutorial_block = (data.button_tutorial_block is defined and data.button_tutorial_block) ? " " ~ data.button_tutorial_block : "" %}
     {% set button_enabled = (data.button_enabled is defined and data.button_enabled) ? " " ~ data.button_enabled : "" %}
 
+    {# Customize this code to render your content #}
     <button class="btn{{ button_type }}{{ button_attribute }}{{ button_tutorial_block }}{{ button_enabled }}">{{ button_text }}</button>
-
+    
+    {% endblock %}
+    
 The button template is quite simple: we check if all the expected params are defined, then 
 these parameters are passed to button tag.
 
@@ -410,25 +443,16 @@ and, while this parameter is settable by javascript, AlphaLemon CMS uses the cla
 approach: this means that the editor is directly bundled with the content into that
 RDF annotation.
 
-To render the editor, the button's template just created must be refactored as follows:
+You might have noticed that the **button.html.twig** template already extends the 
+**AlphaLemonCmsBundle:Editor:base_editor.html.twig** which defines the attribute used
+by AlphaLemon CMS to render the block, which is assigned to **editor** variable in the
+parent template. 
+
+To have the editor injected into the button tag, change the code has follows
 
 .. code-block:: jinja
 
-    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Resources/views/Button/button.html.twig
-    {% extends "AlphaLemonCmsBundle:Editor:base_editor.html.twig" %}
-    
-    {% set button_type = (data.button_type is defined and data.button_type) ? " " ~ data.button_type : "" %}
-    {% set button_attribute = (data.button_type is defined and data.button_type) ? " " ~ data.button_attribute : "" %}
-    {% set button_text = (data.button_text is defined and data.button_text) ? " " ~ data.button_text : "Click me" %}
-    {% set button_tutorial_block = (data.button_tutorial_block is defined and data.button_tutorial_block) ? " " ~ data.button_tutorial_block : "" %}
-    {% set button_enabled = (data.button_enabled is defined and data.button_enabled) ? " " ~ data.button_enabled : "" %}
-
-    {% block body %}
     <button class="btn{{ button_type }}{{ button_attribute }}{{ button_tutorial_block }}{{ button_enabled }}" {{ editor|raw }}>{{ button_text }}</button>
-    {% endblock %}
-
-The block's view extends the **base_editor.html.twig** template where the **editor**
-variable is defined.
 
 The base template simple adds the **data-editor="true"** attribute to the html
 tag that must be enabled for editing. In this case the **{{ editor|raw }}** has been 
@@ -442,24 +466,17 @@ The editor template
 The interface that manages the button attributes is designed implementing a Symfony2 
 form.
 
-Add the **button_editor.html.twig** template inside the **views/Editor** folder, open it and 
-paste the following code:
+The commands generator already added an editor for you, the **bootstrapbuttontutorialblock.html.twig**
+template under the **views/Editor** folder.
+
+As we did for the button content, let's renaming it as **button_editor.html.twig**. The
+template contains the following code:
 
 .. code-block:: jinja
 
-    // src/AlphaLemon/Block/BootstrapButtonTutorialBlockBundle/Resources/views/Editor/button_editor.html.twig
-    <form id="al_item_form">
-        <table>
-            {% include "AlphaLemonCmsBundle:Item:_form_renderer.html.twig" %}
-            <tr>
-                <td colspan="2" style="text-align: right">
-                    <a class="al_editor_save btn btn-primary" href="#" >Save</a>
-                </td>
-            </tr>
-        </table>
-    </form>
+    {% include "AlphaLemonCmsBundle:Editor:base_editor_form.html.twig" %}
     
-The template includes the **AlphaLemonCmsBundle:Item:_form_renderer.html.twig** a template
+The template includes the **AlphaLemonCmsBundle:Editor:base_editor_form.html.twig** a template
 deputated to render a generic form and renders a button to save the changes.
 
 .. note::
@@ -470,8 +487,10 @@ deputated to render a generic form and renders a button to save the changes.
 The editor form
 ~~~~~~~~~~~~~~~
 
-To define the form we talked above, add the **AlButtonType.php** template inside the 
-**Core/Form** folder, open it and paste the following code:
+The commands generator already added a base form, the **BootstrapButtonTutorialBlockType.php** 
+class inside the **Core/Form** folder. So let's renaming it as **AlButtonType.php**. 
+
+This form contains the following code:
 
 .. code-block:: php
 
@@ -481,12 +500,27 @@ To define the form we talked above, add the **AlButtonType.php** template inside
     use AlphaLemon\AlphaLemonCmsBundle\Core\Form\JsonBlock\JsonBlockType;
     use Symfony\Component\Form\FormBuilderInterface;
 
+    class AlBootstrapButtonTutorialBlockType extends JsonBlockType
+    {
+        public function buildForm(FormBuilderInterface $builder, array $options)
+        {
+            parent::buildForm($builder, $options);
+
+            // Add here your fields
+            $builder->add('block_text');
+        }
+    }
+    
+we must rename the class to **AlButtonType** and add the fields required to manage the
+button's attributes. Change the class as follows:
+
     class AlButtonType extends JsonBlockType
     {
         public function buildForm(FormBuilderInterface $builder, array $options)
         {
             parent::buildForm($builder, $options);
             
+            // Add here your fields
             $builder->add('button_text');
             $builder->add('button_type', 'choice', array('choices' => array('' => 'base', 'btn-primary' => 'primary', 'btn-info' => 'info', 'btn-success' => 'success', 'btn-warning' => 'warning', 'btn-danger' => 'danger', 'btn-inverse' => 'inverse')));
             $builder->add('button_attribute', 'choice', array('choices' => array("" => "normal", "btn-mini" => "mini", "btn-small" => "small", "btn-large" => "large")));
@@ -494,9 +528,13 @@ To define the form we talked above, add the **AlButtonType.php** template inside
             $builder->add('button_enabled', 'choice', array('choices' => array("" => "enabled", "disabled" => "disabled")));
         }
     }
+    
+The form inherits from the **JsonBlockType** form which defines the form's name used
+to retrieve the values from the ajax transaction used to save the form values and
+removes the csrf_protection to false.
 
-While it is not mandatory, you should add this form to **DIC**, so open the **app_block.xml**
-configuration file and paste the following code inside:
+While it is not mandatory, this form is added to **DIC**, so the commands generator 
+has defined it in the **app_block.xml** file as follows:
 
 .. code-block:: xml
 
@@ -504,7 +542,7 @@ configuration file and paste the following code inside:
     <parameters>
         [...]
 
-        <parameter key="bootstrap_button_tutorial_block.form.class">AlphaLemon\Block\BootstrapButtonTutorialBlockBundle\Core\Form\AlButtonType</parameter>        
+        <parameter key="bootstrap_button_tutorial_block.form.class">AlphaLemon\Block\BootstrapButtonTutorialBlockBundle\Core\Form\AlBootstrapButtonTutorialBlockType</parameter>        
     </parameters>
 
     <services>       
@@ -514,13 +552,40 @@ configuration file and paste the following code inside:
         </service>
     </services>
     
+You must change the form's class definition as follows:
+
+.. code-block:: xml
+    
+    <parameter key="bootstrap_button_tutorial_block.form.class">AlphaLemon\Block\BootstrapButtonTutorialBlockBundle\Core\Form\AlButtonType</parameter>        
+    
 Render the editor
 ~~~~~~~~~~~~~~~~~
 To render the editor we must pass this form to the editor itself. This task is achieved
-by adding the **editorParameters** method to the AlBlockManagerBootstrapButtonTutorialBlock. 
+by the **editorParameters** method which has been added to AlBlockManagerBootstrapButtonTutorialBlock
+by the generator command.
 
-This one is used to define the parameter which are passed to the editor and overrides 
-the method defined in the **AlBlockManager** object, which returns an empty array by default.
+This method is used to define the parameter which are passed to the editor and overrides 
+the method defined in the **AlBlockManager** object, which returns an empty array by default:
+
+.. code-block:: php
+
+    public function editorParameters()
+    {
+        $items = $this->decodeJsonContent($this->alBlock->getContent());
+        $item = $items[0];
+
+        $formClass = $this->container->get('bootstrapbuttontutorialblock.form');
+        $form = $this->container->get('form.factory')->create($formClass, $item);
+
+        return array(
+            "template" => 'BootstrapButtonTutorialBlockBundle:Editor:bootstrapbuttontutorialblock.html.twig',
+            "title" => "My awesome App-Block",
+            "form" => $form->createView(),
+        );
+    }
+
+We need to adjust it a little to reflect the changes we made:
+
 
 .. code-block:: php
 
