@@ -390,4 +390,4 @@ when you full finalize, this is not possible anymore.
 Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
 
 .. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
-.. _`Symfony2 cookbook`: http://symfony.com
+.. _`Symfony2 cookbook`: http://symfony.com/doc/current/cookbook/bundles/inheritance.html
