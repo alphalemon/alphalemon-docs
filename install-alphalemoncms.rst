@@ -54,8 +54,8 @@ Symfony2 release then open the composer.json file and add the following code:
             }
         ],
         "require": {
-            "alphalemon/alphalemon-cms-bundle": "1.0.*",
-            "alphalemon/alphalemon-cms-installer-bundle": "1.0.*",
+            "alphalemon/alphalemon-cms-bundle": "dev-master",
+            "alphalemon/alphalemon-cms-installer-bundle": "dev-master",
             "doctrine/common": "dev-bugfix as 2.3.0"
         },
         "minimum-stability": "dev",
@@ -315,8 +315,13 @@ before changing the file itself.
 If the bak file does not exist, it means that the file has not been changed yet.
 
 
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`composer`: http://getcomposer.org
-.. _`AlphaLemon CMS sandbox`: http://github.com/AlphaLemonCmsSandbox
+.. _`AlphaLemon CMS sandbox`: http://github.com/alphalemon/AlphaLemonCmsSandbox
 .. _`Symfony2 setup and configuration tutorial`: http://symfony.com/doc/current/book/installation.html#configuration-and-setup
 .. _`yui compressor`: https://github.com/yui/yuicompressor/downloads
 .. _`Symfony2 book`: http://symfony.com/doc/current/book/page_creation.html#before-you-begin-create-the-bundle

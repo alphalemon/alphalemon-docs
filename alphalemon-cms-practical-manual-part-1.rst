@@ -142,5 +142,10 @@ Choose "span4 (300px)" from the combo box and click the save button.
 
 Now you should repeat the same process for other products and services.
 
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`install AlphaLemon CMS`: http://alphalemon.com/download-alphalemon-cms-for-symfony2-framework
 .. _`Users Manual`: http://alphalemon.com/user-manual-part-1

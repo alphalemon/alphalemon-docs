@@ -399,4 +399,9 @@ of your application than add a new **home.twig.html**. Open it and add the follo
 This code overrides the **AwesomeThemeBundle's home.html.twig** template replacing the **left_sidebar** slot with the contents saved with the **top_section_1** slot
 you have filled in your previous **home.html.twig** template.
 
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`themes internal configuration`: the-internals-of-theme-configuration

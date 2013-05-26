@@ -204,6 +204,11 @@ To deploy the website, simply click the **Deploy** button on the main toolbar. A
 CMS will save the pages as twig templates, will copy the assets from the backend to the
 frontend and will generate the routes for the web site.
 
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`Watch the screencast to see how pages are managed by AlphaLemon CMS`: http://alphalemon.com/alphalemon-cms-pages-management-screencast-tutorial
 .. _`Watch the screencast to see how languages are managed by AlphaLemon CMS`: http://alphalemon.com/alphalemon-cms-screencast-languages-management-tutorial
 .. _`dedicated tutorial`: http://alphalemon.com/add-a-custom-theme-to-alphalemon-cms

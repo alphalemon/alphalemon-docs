@@ -566,4 +566,9 @@ After reading this chapter you should be able to add an App-Block to an existing
 add a controller and a route to handle the implemented actions, add an App-Block's extra 
 asset to AlphaLemon CMS, override the default action to save the block's content
 
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`Add a new App-Block`: http://www.alphalemon.com/add-a-new-block-app-to-alphalemon-cms

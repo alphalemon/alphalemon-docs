@@ -366,4 +366,9 @@ has been created under the **views/Block** bundle's folder, then the following c
 
 This editor extends the base **item.html.twig** and adds a button to return back to list editor.
 
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`add custom block`: add-a-new-content-to-alphalemon-cms

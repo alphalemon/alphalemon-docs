@@ -620,3 +620,10 @@ After reading this chapter you should be able to create a new App-Block using th
 command, create a new object to manage the content rendered on the page, create a service 
 that handles that object, manage a json content instead of an html content, create a 
 template to display the content and create an editor to manage the content.
+
+
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs

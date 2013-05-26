@@ -218,6 +218,11 @@ Offices are managed with the dedicated Bootbusiness Contact Office block. The co
 template adds an office by default, so feel free to add a new office and to customize 
 the contacts on your own. 
 
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`this tutorial`: http://alphalemon.com/how-to-change-a-content-at-runtime
 
 

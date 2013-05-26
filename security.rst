@@ -152,4 +152,9 @@ The route that performs this action is the **deleteBlock**, so it is secured as 
         - { path: ^/backend, roles: ROLE_USER }
 
 
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`security from Symfony2 book`: http://symfony.com/doc/current/book/security.html

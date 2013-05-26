@@ -277,6 +277,11 @@ in more website, without reinventig the weel each time.
 In addiction you might `share it`_ with the AlphaLemon CMS community.
 
 
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`Watch the screencast to see how you can move through pages`: http://alphalemon.com/alphalemon-cms-page-browsing-screencast-tutorial
 .. _`how to create a new block`: http://alphalemon.com/add-a-new-block-app-to-alphalemon-cms
 .. _`available blocks`: http://alphalemon.com/extend-your-alphalemon-cms-application-adding-new-app-blocks

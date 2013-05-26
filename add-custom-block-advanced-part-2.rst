@@ -520,4 +520,9 @@ After reading this chapter you should be able to create a block that includes ot
 blocks, add an editor for the main block, make a block not wisible in the adder menu,
 create a block that manage a list of blocks and use the inlinelist plugin.
 
+.. class:: fork-and-edit
+
+Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+
+.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`renderSlot`: add-a-custom-theme-to-alphalemon-cms#the-slots
