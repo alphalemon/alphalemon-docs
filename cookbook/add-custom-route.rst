@@ -1,27 +1,27 @@
 Add a custom route outside the CMS
 ==================================
-AlphaLemon CMS automatically creates a Symfony2 route for each page you add to your
+AlphaLemon CMS automatically creates a Symfony2 route for each page that you add to your
 website and uses a permalink to describe the page link. 
 
-In addiction each route cab be translates for each language of your website.
+In addition, each route can be translated for any language used on your website.
 
 This approach could be a limit when you want to add a page managed by an action from
 a custom controller. 
 
-Since AlphaLemon CMS Release Candidate 2, this gap is covered in an elegant way, in 
-fact, when you deploy your website, AlphaLemon CMS creates the base views for each theme's
-template, then you just need to extend one of them and inject some elaborated data 
+Since AlphaLemon CMS Release Candidate 2, this gap is covered in an elegant way. In 
+fact when you deploy your website, AlphaLemon CMS creates the base views for each theme's
+template, then you just need to extend one of them and inject additional data 
 in a custom action.
 
 The project
 -----------
-We are going to add a custom route to display on a web page the details related to a generic
-product.
+We are going to add a custom route to display the details related to a generic
+product on a web page.
 
 We will fetch this information from a database, using **Doctrine ORM**, to demonstrate how
-AlphaLemon CMS, which is powered by **Propel ORM**, simply sits beside your website and let you
-choose the tools you feel better, without obey you to use something you don't want
-to use.
+AlphaLemon CMS, which is powered by **Propel ORM**, simply sits beside your website and allows you to
+choose the tools you feel most comfortable with, without you having to use something you don't want
+to.
 
 The webpage layout will be one of the templates that comes with the **BootbusinessThemeBundle**
 and the data fetched from the database will be displayed into some template's blocks.
@@ -34,8 +34,8 @@ and the data fetched from the database will be displayed into some template's bl
 
 Add a new route
 ---------------
-Be sure your deploy bundle's **routing.yml** file is imported in the app's **routing.yml**
-configuration, otherway import it as follows:
+Be sure your deploy bundles **routing.yml** file is imported in the apps **routing.yml**
+configuration, otherwise import it as follows:
 
 .. code:: text
 
@@ -55,8 +55,8 @@ bundle and add the following route:
         
 Add the entity that manages the product
 ---------------------------------------
-Add the **Entity** folder inside your deploy bundle and inside it, create the **Product.php**
-file with this code inside:
+Add the **Entity** folder inside your deploy bundle, and inside it create the **Product.php**
+file using the following code:
 
 .. code:: php
 
@@ -93,7 +93,7 @@ file with this code inside:
         protected $description;
     }
     
-Then run the following command to generate the getters and setters:
+Next, run the following Terminal command to generate the getters and setters:
 
 .. code:: text
 
@@ -102,7 +102,7 @@ Then run the following command to generate the getters and setters:
         
 Add the action
 --------------
-Open the ***WebSiteController.php** file and add a new action as exposed below:
+Open the ***WebSiteController.php** file and add a new action as set out below:
 
 .. code:: php
 
@@ -152,12 +152,12 @@ Now add a new **product.html.twig** template under the bundle's views folder:
     </table>
     {% endblock %}
     
-Here is the trick. The template extends the **empty.html.twig** base generated template 
+Here is the trick. The template extends the **empty.html.twig** base generated template,
 and overrides two of its blocks: the **page_title** block, where the product name
-is displayed and the **content** block where are exposed the product details.
+is displayed, and the **content** block which contains the product details.
 
-You could have noticed that the **extends** instruction contains the **environment_folder**
-variable which handles the current environment, in fact AlphaLemon CMS can deploy the
+You may have noticed that the **extends** instruction contains the **environment_folder**
+variable which handles the current environment. In fact, AlphaLemon CMS can deploy the
 website for the stage and/or production environment. In this way the template is "environment
 agnostic".
 
@@ -199,7 +199,7 @@ template parameters definition.
         
 Deploy your website
 -------------------
-At the moment the website base templates have not been created yet and now we are going to
+At the moment, the website base templates have not been created yet. So now we are going to
 do that.
 
 To deploy the website for the stage environment simply open the toolbar and click the 
@@ -207,30 +207,30 @@ To deploy the website for the stage environment simply open the toolbar and clic
 
 .. note::
 
-    Deploying for the stage environment to develop this new page, keeps you safe from adding
-    something under development, in production.
+    Deploying for the stage environment to develop this new page keeps you safe from adding
+    something under development, whilst in production.
 
 When AlphaLemon CMS completes the deploying operation, open a new tab in your browser and 
 enter in the stage dev environment: **http://localhost/stage_dev.php/en/product/1**
 
 .. note::
 
-    Oviously you need at least a record in your table to see the page correctly rendered,
+    Obviously you will need to have at least one record in your table to see the page correctly rendered,
     otherwise you get an exception.
 
 Conclusion
 ----------
 
-The result does not look so good to see, but this is not the pourpose of this tutorial. 
+The result does not look impressive, but this is not the purpose of this tutorial. 
 
-Despite of this you have learned how to add a custom route to a website powered by
-AlphaLemon CMS and how to manage data from a database, using **Doctrine** Orm instead of 
+You have now learned how to add a custom route to a website powered by
+AlphaLemon CMS and how to manage data from a database, using **Doctrine** ORM instead of 
 **Propel**.
 
 
 .. class:: fork-and-edit
 
-Found a typo ? Something is wrong in this documentation ? `Just fork and edit it !`_
+Found a typo? Is something not correct in this documentation? `Just fork and edit it!`_
 
-.. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
+.. _`Just fork and edit it!`: https://github.com/alphalemon/alphalemon-docs
 .. _`Add a new App-Block`: http://www.alphalemon.com/add-a-new-block-app-to-alphalemon-cms
