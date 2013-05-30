@@ -409,8 +409,6 @@ The **button.html.twig** template contains the following code:
     
     {% endblock %}
 
-{% endblock %}
-
 change it as follows
 
 .. code-block:: jinja
@@ -448,17 +446,17 @@ You might have noticed that the **button.html.twig** template already extends th
 by AlphaLemon CMS to render the block, which is assigned to **editor** variable in the
 parent template. 
 
-To have the editor injected into the button tag, change the code has follows
+To have the editor injected into the button tag, you must add the **{{ editor|raw }}**
+instruction into the html tag which will be updated, in our case the button tag.
+
+Change the code has follows
 
 .. code-block:: jinja
 
     <button class="btn{{ button_type }}{{ button_attribute }}{{ button_tutorial_block }}{{ button_enabled }}" {{ editor|raw }}>{{ button_text }}</button>
 
-The base template simple adds the **data-editor="true"** attribute to the html
-tag that must be enabled for editing. In this case the **{{ editor|raw }}** has been 
-written into the button tag.
-
-When the page is rendered, this attribute is replaced with the editor data.
+The instruction just added, simple adds the **data-editor="true"** attribute to the html
+tag which is replaced with the editor data, when the page is rendered
 
 The editor template
 ~~~~~~~~~~~~~~~~~~~
@@ -513,6 +511,8 @@ This form contains the following code:
     
 we must rename the class to **AlButtonType** and add the fields required to manage the
 button's attributes. Change the class as follows:
+
+.. code-block:: php
 
     class AlButtonType extends JsonBlockType
     {
