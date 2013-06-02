@@ -7,7 +7,7 @@ In this chapter you will learn:
 
     1. Create a block that includes other blocks
     2. Add an editor for the main block
-    3. Make a block not wisible in the adder menu.
+    3. Make a block not visible in the adder menu.
     4. Create a block that manage a list of blocks
     5. Use the inlinelist plugin
 

@@ -37,7 +37,7 @@ Add a new route
 Be sure your deploy bundles **routing.yml** file is imported in the apps **routing.yml**
 configuration, otherwise import it as follows:
 
-.. code:: text
+.. code-block:: text
 
     # app/config/routing.yml
     _WebSiteBundle:
@@ -46,7 +46,7 @@ configuration, otherwise import it as follows:
 Open the **routing.yml** file under the **Resources/config** folder of your deploy
 bundle and add the following route:
 
-.. code:: text
+.. code-block:: text
 
     # src/AlphaLemon/WebSiteBundle/Resources/config/routing.yml
     _product:
@@ -58,7 +58,7 @@ Add the entity that manages the product
 Add the **Entity** folder inside your deploy bundle, and inside it create the **Product.php**
 file using the following code:
 
-.. code:: php
+.. code-block:: php
 
     // src/AlphaLemon/WebSiteBundle/Entity/Product.php
     namespace AlphaLemon\WebSiteBundle\Entity;
@@ -95,7 +95,7 @@ file using the following code:
     
 Next, run the following Terminal command to generate the getters and setters:
 
-.. code:: text
+.. code-block:: text
 
     php app/console doctrine:generate:entities AlphaLemon/WebSiteBundle/Entity/Product
         
@@ -104,7 +104,7 @@ Add the action
 --------------
 Open the ***WebSiteController.php** file and add a new action as set out below:
 
-.. code:: php
+.. code-block:: php
 
     // src/AlphaLemon/WebSiteBundle/Controller/WebSiteController.php
     class WebSiteController extends FrontendController
@@ -130,7 +130,7 @@ Add the template
 ----------------
 Now add a new **product.html.twig** template under the bundle's views folder:
 
-.. code:: JINJI
+.. code-block:: jinja
 
     // src/AlphaLemon/WebSiteBundle/Resources/views/product.html.twig
     {% extends 'AlphaLemonWebSiteBundle:' ~ environment_folder ~ ':' ~ app.request.get('_locale') ~ '/base/empty.html.twig' %}
@@ -152,7 +152,9 @@ Now add a new **product.html.twig** template under the bundle's views folder:
     </table>
     {% endblock %}
     
-Here is the trick. The template extends the **empty.html.twig** base generated template,
+**Here is the trick.**
+
+The template extends the **empty.html.twig** base generated template,
 and overrides two of its blocks: the **page_title** block, where the product name
 is displayed, and the **content** block which contains the product details.
 
@@ -165,7 +167,7 @@ The **environment_folder** has not been declared yet: let's do that now.
 
 Open the controller and change it as follows:
 
-.. code:: php
+.. code-block:: php
 
     // src/AlphaLemon/WebSiteBundle/Controller/WebSiteController.php
     class WebSiteController extends FrontendController
