@@ -43,20 +43,11 @@ Symfony2 release then open the composer.json file and add the following code:
             {
                 "type": "composer",
                 "url": "http://apps.alphalemon.com/"
-            },
-            {
-                "type": "git",
-                "url": "https://github.com/alphalemon/common"
-            },
-            {
-                "type": "git",
-                "url": "https://github.com/alphalemon/Propel"
             }
         ],
         "require": {
             "alphalemon/alphalemon-cms-bundle": "dev-master",
-            "alphalemon/alphalemon-cms-installer-bundle": "dev-master",
-            "doctrine/common": "dev-bugfix as 2.3.0"
+            "alphalemon/alphalemon-cms-installer-bundle": "dev-master"
         },
         "minimum-stability": "dev",
     }
