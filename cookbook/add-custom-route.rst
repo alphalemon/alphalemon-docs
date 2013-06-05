@@ -197,6 +197,41 @@ Open the controller and change it as follows:
     
 The new **getEnvironmentFolder** protected method has been added and called in the
 template parameters definition.
+
+Dispatch the events
+-------------------
+In the chapter `How to change a content at runtime`_ you learned how to replace the 
+content on a slot, implementing a listener.
+
+The events, these listeners respond, are dispatched in the FrontendController just before
+returning the **Response**. 
+
+When you create a custom controller, you should always dispatch these events to avoid
+bad surprises when you use some listeners.
+
+To achieve this task, you just need to call the **dispatchEvents** method, which dispatches 
+the events and returns back the modified Response or the same when any listener exists.
+
+Here is the code:
+
+.. code-block:: php
+
+    // src/AlphaLemon/WebSiteBundle/Controller/WebSiteController.php
+    class WebSiteController extends FrontendController
+    {
+        public function productAction($id)
+        {
+            [...]
+
+            $response = $this->render('AlphaLemonWebSiteBundle:Product:product.html.twig', array(
+                'product' => $product,
+                'base_template' => $this->container->getParameter('alpha_lemon_theme_engine.base_template'),
+                'environment_folder' => $this->getEnvironmentFolder(),
+            ));
+        
+            return $this->dispatchEvents($this->container->get('request'), $response);
+        }
+    }
         
         
 Deploy your website
@@ -235,4 +270,5 @@ AlphaLemon CMS and how to manage data from a database, using **Doctrine** ORM in
 Found a typo? Is something not correct in this documentation? `Just fork and edit it!`_
 
 .. _`Just fork and edit it!`: https://github.com/alphalemon/alphalemon-docs
-.. _`Add a new App-Block`: http://www.alphalemon.com/add-a-new-block-app-to-alphalemon-cms
+.. _`Add a new App-Block`: http://alphalemon.com/add-a-new-block-app-to-alphalemon-cms
+.. _`How to change a content at runtime`: http://alphalemon.com/how-to-change-a-content-at-runtime
