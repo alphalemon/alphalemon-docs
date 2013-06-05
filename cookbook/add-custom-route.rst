@@ -203,8 +203,8 @@ Dispatch the events
 In the chapter `How to change a content at runtime`_ you learned how to replace the 
 content on a slot, implementing a listener.
 
-The events, these listeners respond, are dispatched in the FrontendController just before
-returning the **Response**. 
+FrontendController dispatches the events these listeners respond, just before returning 
+the **Response**. 
 
 When you create a custom controller, you should always dispatch these events to avoid
 bad surprises when you use some listeners.
