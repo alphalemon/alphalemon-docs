@@ -46,18 +46,21 @@ Symfony2 release then open the composer.json file and add the following code:
             }
         ],
         "require": {
+            [...]
             "alphalemon/alphalemon-cms-bundle": "dev-master",
-            "alphalemon/alphalemon-cms-installer-bundle": "dev-master"
+            "alphalemon/alphalemon-cms-installer-bundle": "dev-master",
+            "alphalemon/app-tinymce-block-bundle" : "dev-master",          
+            "alphalemon/bootbusiness-theme-bundle": "dev-master"
         },
-        "minimum-stability": "dev",
+        "minimum-stability": "dev"
     }
 
 .. note::
 
-    There is a bug in **doctrine/common** that causes the AlphaLemon CMS tests to fail.
-    If you don't plan to run the test suit, you can safety remove that dependency.
-
-    The propel dependency will be removed when the 1.6.8 version is released.
+    AlphaLemon CMS uses TinyMCE as default editor to manage an hypertext content, but
+    there is a bundle that uses the CKEditor editor. If you are more confortable with
+    this editor, replace the **"alphalemon/app-tinymce-block-bundle" : "dev-master"**
+    declaration with **"alphalemon/app-ckeditor-block-bundle" : "dev-master"**
 
 Install AlphaLemon CMS
 ----------------------
@@ -117,6 +120,12 @@ From the Symfony2 book:
 AlphaLemon CMS does not add anything new to Symfony2, so it requires you to create 
 that bundle too.
 
+From the top level folder of your Symfony2 application, run the following command:
+
+.. code-block:: text
+
+    php app/console generate:bundle
+
 By default AlphaLemon CMS looks for the **Acme/WebSite** bundle. Obviously you can
 choose any name you wish for your bundle: the AlphaLemon CMS installer will ask you
 for this.
@@ -162,6 +171,10 @@ and add this code:
     {
     }
 
+.. note::
+
+    Don't forget to arrange the **namespace** according with your configuration.
+
 If you want to use a controller with a different name, you must obviously rename the
 controller itself, then you must tell AlphaLemon CMS to generate the routes pointing
 this controller.
@@ -190,6 +203,40 @@ code as follows:
     {
     }
 
+Install assets
+--------------
+
+AlphaLemon CMS uses Twitter's **bower** package manager to manage external assets
+required by AlphaLemon CMS.
+
+A console command is provided to generate the required **component.json** file under 
+the application web folder, which usually is called **web**. Run the following command 
+to create that file:
+
+.. code-block:: text
+
+    php app/console alphalemon:build:bower
+
+If you plan to use a different folder, you can specify that one as follows:
+
+.. code-block:: text
+ 
+    php app/console alphalemon:build:bower --web-folder=[folder name]
+
+To finally install the assets, enter into the application's web folder and run the following
+command:
+
+.. code-block:: text
+
+    bower install
+
+
+.. note::
+
+    if you have not **bower** installed, you can download the AlphaLemon CMS Sandbox and
+    grab the **components** folder from the sandbox **web** directory, into your application's
+    web folder.
+
 
 Add the installer routes for web interface
 ------------------------------------------
@@ -204,7 +251,8 @@ install bundle:
 
 .. note::
 
-    This setting is not required if you install using the console.
+    This setting is required only if you are going to use the web interface, otherwise
+    you can safety skip this step.
 
 
 Installing from the console
