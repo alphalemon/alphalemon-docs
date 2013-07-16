@@ -234,8 +234,8 @@ command:
 .. note::
 
     if you have not **bower** installed, you can download the AlphaLemon CMS Sandbox and
-    grab the **components** folder from the sandbox **web** directory, into your application's
-    web folder.
+    grab the **components** folder from the sandbox **web** directory, and copy it into 
+    your application's web folder.
 
 
 Add the installer routes for web interface
