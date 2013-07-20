@@ -1,8 +1,8 @@
 AlphaLemon CMS installation procedure
 =====================================
 
-AlphaLemon CMS is distributed using `composer`_, so the first thing to do is to get
-composer.
+AlphaLemon CMS is distributed using `composer`_, so the first thing to do is to grab
+it from their website.
 
 .. note::
 
@@ -33,8 +33,8 @@ If you do not have curl installed, then you can use:
 Add AlphaLemon to your composer.json file
 -----------------------------------------
 
-AlphaLemon CMS requires a full working Symfony 2.1 application, so download the latest
-Symfony2 release then open the composer.json file and add the following code:
+AlphaLemon CMS requires a **Symfony 2.3** application, so download the latest Symfony2 
+release then open the composer.json file and add the following requirements:
 
 .. code-block:: text
 
@@ -59,7 +59,7 @@ Symfony2 release then open the composer.json file and add the following code:
 
     AlphaLemon CMS uses TinyMCE as default editor to manage an hypertext content, but
     there is a bundle that uses the CKEditor editor. If you are more confortable with
-    this editor, replace the **"alphalemon/app-tinymce-block-bundle" : "dev-master"**
+    this one, replace the **"alphalemon/app-tinymce-block-bundle" : "dev-master"**
     declaration with **"alphalemon/app-ckeditor-block-bundle" : "dev-master"**
 
 Install AlphaLemon CMS
@@ -84,7 +84,7 @@ Install other dependencies
 --------------------------
 
 AlphaLemon CMS requires by default the `yui compressor`_ which is useful to compact 
-your assets into one, which reduces page time loading. Grab and unpack it into the **app/Resources/java**
+your assets into one to reduces page time loading. Grab and unpack it into the **app/Resources/java**
 folder and rename it **yuicompressor.jar**.
 
 .. note::
@@ -233,63 +233,9 @@ command:
 
 .. note::
 
-    if you have not **bower** installed, you can download the AlphaLemon CMS Sandbox and
-    grab the **components** folder from the sandbox **web** directory, and copy it into 
+    if you don't have **bower** installed, you can download the AlphaLemon CMS Sandbox and
+    grab the **components** folder from the package **web** directory, and then copy it into 
     your application's web folder.
-
-
-Add the installer routes for web interface
-------------------------------------------
-Finally, if you are going to use the web interface, you must add the routes for the
-install bundle:
-
-.. code-block:: text
-    
-    // app/config/routing.yml
-    _AlphaLemonCmsInstallerBundle:
-        resource: "@AlphaLemonCmsInstallerBundle/Resources/config/routing.yml"
-
-.. note::
-
-    This setting is required only if you are going to use the web interface, otherwise
-    you can safety skip this step.
-
-
-Installing from the console
----------------------------
-
-Installing AlphaLemonCMS from the console is really easy:
-
-.. code-block:: text
-
-    app/console alphalemon:install-cms
-
-This will run the interactive command. Provide the required information and you are done! Point
-your browser at
-
-.. code-block:: text
-
-    http://localhost/alcms.php/backend/en/index
-
-to start using AlphaLemonCMS.
-
-Installing using the web interface
-----------------------------------
-
-To start AlphaLemon CMS installation, simply point your browser at:
-
-.. code-block:: text
-
-    http://localhost/app_dev.php/install
-
-Provide the required information and you are done! Once the process is complete, a web
-page is rendered with the process summary and gives you the information required
-to start.
-
-Permissions
------------
-Don't forget to setup the permissions on the installation folder as explained in the
-`Symfony2 setup and configuration tutorial`_
 
 Remove the AcmeDemoBundle
 -------------------------
@@ -323,12 +269,66 @@ Delete the following code from **app/config/routing_dev.yml**
         type: annotation
         prefix: /demo
 
-
 Clear your cache:
 
 .. code-block:: text
 
     php app/console cache:clear
+
+Add the installer routes for web interface
+------------------------------------------
+Finally, if you are going to use the web interface, you must add the routes for the
+install bundle:
+
+.. code-block:: text
+    
+    // app/config/routing.yml
+    _AlphaLemonCmsInstallerBundle:
+        resource: "@AlphaLemonCmsInstallerBundle/Resources/config/routing.yml"
+
+.. note::
+
+    This setting is required only if you are going to use the web interface, otherwise
+    you can safety skip this step.
+
+
+Installing from the console
+---------------------------
+
+Installing AlphaLemonCMS from the console is really easy:
+
+.. code-block:: text
+
+    app/console alphalemon:install-cms
+
+This will run the interactive command which leads to to setup AlphaLemon CMS, so just 
+provide the required information and you are done!
+
+Point your browser at
+
+.. code-block:: text
+
+    http://localhost/alcms.php/backend/en/index
+
+to start using AlphaLemonCMS.
+
+Installing using the web interface
+----------------------------------
+
+To start AlphaLemon CMS installation, simply point your browser at:
+
+.. code-block:: text
+
+    http://localhost/app_dev.php/install
+
+Provide the required information and you are done! Once the process is complete, a web
+page is rendered with the process summary and gives you the information required
+to start.
+
+Permissions
+-----------
+Don't forget to setup the permissions on the installation folder as explained in the
+`Symfony2 setup and configuration tutorial`_
 
 
 What to do if something goes wrong
@@ -360,7 +360,7 @@ Found a typo ? Something is wrong in this documentation ? `Just fork and edit it
 
 .. _`Just fork and edit it !`: https://github.com/alphalemon/alphalemon-docs
 .. _`composer`: http://getcomposer.org
-.. _`AlphaLemon CMS sandbox`: http://github.com/alphalemon/AlphaLemonCmsSandbox
+.. _`AlphaLemon CMS sandbox`: download-alphalemon-cms-for-symfony2-framework
 .. _`Symfony2 setup and configuration tutorial`: http://symfony.com/doc/current/book/installation.html#configuration-and-setup
 .. _`yui compressor`: https://github.com/yui/yuicompressor/downloads
 .. _`Symfony2 book`: http://symfony.com/doc/current/book/page_creation.html#before-you-begin-create-the-bundle
