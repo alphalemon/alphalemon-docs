@@ -37,8 +37,9 @@ which has easily been adapted for our application.
 Give a look to their `official gallery`_ where are shown several websites made on top of 
 Twitter Bootstrap.
 
-If that sounds like you, then immediately learn `how to install`_ your first AlphaLemon 
-CMS application.
+If that sounds like you, you can immediately learn `how to install`_ your first AlphaLemon 
+CMS application and, after that, move to the `quick start`_ documents if you are very 
+impatient, or take it easy and continue reading `the book`_.
 
 
 .. class:: fork-and-edit
@@ -49,3 +50,5 @@ Found a typo ? Something is wrong in this documentation ? `Just fork and edit it
 .. _`learn more about it`: http://symfony.com
 .. _`official gallery` : http://builtwithbootstrap.com/
 .. _`how to install` : how-to-install-alphalemon-cms
+.. _`quick start` : alphalemon-cms-practical-manual-part-1
+.. _`the book` : alphalemon-cms-backend-editor-and-stage-environments-design
