@@ -18,7 +18,7 @@ In this chapter you will learn:
 What is a Block
 ---------------
 
-A Block represents a content displayed on a web page. In addiction an **App-Block**
+A **Block** is a container for one kind of content. In addiction an **App-Block**
 includes the editor to manage the block itself by AlphaLemon CMS, when the page
 is in editing mode.
 
@@ -231,25 +231,8 @@ The command just run had already added this class for you, as follows:
 This new object simply extends the **AlBlockManagerJsonBlockContainer** base class and 
 implements the **getDefaultValue** method required by the parent object.
 
-This implemented function defines the default value displayed on the web page, when
-a new content is added, with a standard value, and should obviously changed to fit
-your needs.
-
-This method returns and array, which may have the following options:
-
-1. Content
-2. ExternalStylesheet
-3. InternalStylesheet
-4. ExternalJavascript
-5. InternalJavascript
-
-Combining the available options, you may have the desidered behaviour the block
-must have, when it is added to the web page.
-
-.. note::
-
-    The ExternalStylesheet and ExternalJavascript must contain a string of assets
-    separated by a comma value.
+This method defines the default value displayed on the web page when a new content is 
+added and must return an array.
    
 How to tell AlphaLemonCMS to manage the Bundle
 ----------------------------------------------
