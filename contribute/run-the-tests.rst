@@ -81,7 +81,7 @@ then run
 
 .. code:: text
 
-    php composer.phar install --devs
+    php composer.phar install --dev
 
 From the top root folder of your cloned repository run:
 
