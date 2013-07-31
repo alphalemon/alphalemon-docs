@@ -291,6 +291,21 @@ install bundle:
     This setting is required only if you are going to use the web interface, otherwise
     you can safety skip this step.
 
+Xdebug configuration
+--------------------
+When you use **Xdebug** with your php installation, you need to configure that module
+as follows:
+
+.. code-block:: text
+    
+    xdebug.max_nesting_level=1000
+
+otherwise you could get an error or, worse, the page rendering could stop, without
+displaying nothing on the screen.
+
+.. note::
+
+    If you don't use **Xdebug** you can safety skip this paragraph.
 
 Installing from the console
 ---------------------------
